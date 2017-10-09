@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
-    <data/>
+    <data>
+        <variable
+            name="jvm"
+            type="dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel"
+            />
+    </data>
+
     <LinearLayout
         android:id="@+id/journey_item"
+        android:onClick="@{() -> jvm.onJourneyClick()}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:layout_margin="5dp" >
         <TextView
             android:id="@+id/name"
+            android:text="@{jvm.name}"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
@@ -20,12 +28,14 @@
             >
             <TextView
                 android:id="@+id/start_date"
+                android:text="@{jvm.from}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 />
             <TextView
                 android:id="@+id/end_date"
+                android:text="@{jvm.to}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"

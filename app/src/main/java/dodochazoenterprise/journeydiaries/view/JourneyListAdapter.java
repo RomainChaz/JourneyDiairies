@@ -1,17 +1,16 @@
-package dodochazoenterprise.journeydiaries;
+package dodochazoenterprise.journeydiaries.view;
 
 import android.databinding.DataBindingUtil;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
+import dodochazoenterprise.journeydiaries.R;
 import dodochazoenterprise.journeydiaries.databinding.JourneyItemBinding;
 import dodochazoenterprise.journeydiaries.model.Journey;
+import dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel;
 
 /**
  * Created by Romain on 09/10/2017.
@@ -34,15 +33,9 @@ class JourneyListAdapter extends RecyclerView.Adapter<JourneyListAdapter.Binding
     public void onBindViewHolder(JourneyListAdapter.BindingHolder holder, int
             position) {
         JourneyItemBinding binding = holder.binding;
-        Journey journey = journeys.get(position);
-        binding.name.setText(journey.getName());
-        Calendar cal = journey.getFrom();
-        DateFormat sdf =
-                SimpleDateFormat.getDateInstance(SimpleDateFormat.MEDIUM,
-                        Locale.getDefault());
-        binding.startDate.setText(sdf.format(cal.getTime()));
-        cal = journey.getTo();
-        binding.endDate.setText(sdf.format(cal.getTime()));
+
+        binding.setJvm(new JourneyViewModel(journeys.get(position)));
+
     }
     @Override
     public int getItemCount() {

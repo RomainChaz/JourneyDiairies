@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <data/>
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -9,11 +10,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
+
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_journey_button"
-            android:layout_gravity="bottom|end"
+            android:layout_gravity="top|left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            />
+            android:layout_marginRight="20px"
+            android:layout_marginBottom="20px"
+            android:src="@android:drawable/ic_menu_add"
+            app:layout_anchor="@+id/journeys_list"
+            app:layout_anchorGravity="bottom|right" />
     </android.support.design.widget.CoordinatorLayout>
 </layout>
