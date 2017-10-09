@@ -1,5 +1,6 @@
 package dodochazoenterprise.journeydiaries.viewModel;
 
+import android.content.Context;
 import android.databinding.BaseObservable;
 
 import java.text.DateFormat;
@@ -7,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
 
+import dodochazoenterprise.journeydiaries.MainActivity;
 import dodochazoenterprise.journeydiaries.model.Journey;
 
 /**
@@ -15,8 +17,10 @@ import dodochazoenterprise.journeydiaries.model.Journey;
 
 public class JourneyViewModel extends BaseObservable {
     private Journey journey;
-    public JourneyViewModel(Journey journey) {
+    private Context context;
+    public JourneyViewModel(Context context, Journey journey) {
         this.journey = journey;
+        this.context = context;
     }
     public String getName() {
         return journey.getName();
@@ -34,7 +38,13 @@ public class JourneyViewModel extends BaseObservable {
         return sdf.format(cal.getTime());
     }
     public void onJourneyClick() {
-        System.out.println("OnClick "+getName());
-
+        if (journey == null){
+            ((MainActivity) context).showManage(new Journey());
+        }else{
+            ((MainActivity) context).showManage(journey);
+        }
+    }
+    public void onCancelClick(){
+        ((MainActivity) context).showStartup();
     }
 }

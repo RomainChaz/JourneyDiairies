@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <data/>
+    <data>
+        <variable
+            name="jvm"
+            type="dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel"
+            />
+    </data>
     <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -13,6 +18,7 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_journey_button"
+            android:onClick="@{() -> jvm.onJourneyClick()}"
             android:layout_gravity="top|left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

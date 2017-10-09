@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout>
+    <data>
+        <variable
+            name="jvm"
+            type="dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel"
+            />
+    </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <data>
-        <variable
-            android:name="jmm"
-            android:type="dodochazoenterprise.journeydiaries.view.JourneyManageFragment"
-            />
-        <variable
-            android:name="jvm"
-            android:type="dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel"
-            />
-    </data>
+
     <Button
         android:text="Cancel"
+        android:onClick="@{() -> jvm.onCancelClick()}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
@@ -35,24 +35,6 @@
         android:layout_alignParentEnd="true" />
 
     <TextView
-        android:text="Name :"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignStart="@+id/buttonCancel"
-        android:layout_marginTop="164dp"
-        android:id="@+id/textName" />
-
-    <TextView
-        android:text="Departure date :"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/textName"
-        android:layout_alignStart="@+id/textName"
-        android:layout_marginTop="24dp"
-        android:id="@+id/textFrom" />
-
-    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -61,27 +43,7 @@
         android:text="Return date :" />
 
     <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="@{jvm.name}"
-        android:ems="10"
-        android:layout_alignBottom="@+id/textFrom"
-        android:layout_toEndOf="@+id/textName"
-        android:layout_marginStart="10dp"
-        android:layout_marginBottom="25dp"
-        android:id="@+id/editName" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="date"
-        android:ems="10"
-        android:layout_toEndOf="@+id/textFrom"
-        android:id="@+id/editFrom"
-        android:layout_above="@+id/textTo" />
-
-    <EditText
+        android:text="@{jvm.to}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="date"
@@ -90,4 +52,46 @@
         android:layout_toEndOf="@+id/textTo"
         android:id="@+id/editTo" />
 
+    <TextView
+        android:text="Name :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textName"
+        android:layout_above="@+id/editFrom"
+        android:layout_alignStart="@+id/buttonCancel"
+        android:layout_marginBottom="78dp" />
+
+    <EditText
+        android:text="@{jvm.name}"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:ems="10"
+        android:id="@+id/editName"
+        android:layout_alignBaseline="@+id/textName"
+        android:layout_alignBottom="@+id/textName"
+        android:layout_toEndOf="@+id/textName" />
+
+    <EditText
+        android:text="@{jvm.from}"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="date"
+        android:ems="10"
+        android:id="@+id/editFrom"
+        android:layout_above="@+id/editTo"
+        android:layout_toEndOf="@+id/textFrom"
+        android:layout_marginBottom="14dp" />
+
+    <TextView
+        android:text="Departure date :"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textFrom"
+        android:layout_alignBaseline="@+id/editFrom"
+        android:layout_alignBottom="@+id/editFrom"
+        android:layout_alignStart="@+id/textName" />
+
 </RelativeLayout>
+
+</layout>

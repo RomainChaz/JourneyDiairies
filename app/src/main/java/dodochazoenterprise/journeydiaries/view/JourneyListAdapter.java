@@ -1,5 +1,6 @@
 package dodochazoenterprise.journeydiaries.view;
 
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,8 +20,10 @@ import dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel;
 class JourneyListAdapter extends RecyclerView.Adapter<JourneyListAdapter.BindingHolder>
 {
     private List<Journey> journeys;
-    JourneyListAdapter(List<Journey> journeys) {
+    private Context context;
+    JourneyListAdapter(Context context, List<Journey> journeys) {
         this.journeys = journeys;
+        this.context = context;
     }
     @Override
     public BindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -34,7 +37,7 @@ class JourneyListAdapter extends RecyclerView.Adapter<JourneyListAdapter.Binding
             position) {
         JourneyItemBinding binding = holder.binding;
 
-        binding.setJvm(new JourneyViewModel(journeys.get(position)));
+        binding.setJvm(new JourneyViewModel(this.context, journeys.get(position)));
 
     }
     @Override

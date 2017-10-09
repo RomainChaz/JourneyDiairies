@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
 import dodochazoenterprise.journeydiaries.databinding.MainActivityBinding;
+import dodochazoenterprise.journeydiaries.model.Journey;
 import dodochazoenterprise.journeydiaries.view.JourneyManageFragment;
 import dodochazoenterprise.journeydiaries.view.JourneysFragment;
 
@@ -30,5 +31,11 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container,fragment);
         transaction.commit();
     }
-
+    public void showManage(Journey journey){
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        JourneyManageFragment fragment = new JourneyManageFragment(journey);
+        transaction.replace(R.id.fragment_container,fragment);
+        transaction.commit();
+    }
 }

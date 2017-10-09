@@ -19,14 +19,28 @@ import java.util.List;
 import java.util.Locale;
 
 import dodochazoenterprise.journeydiaries.R;
+import dodochazoenterprise.journeydiaries.databinding.JourneyManageBinding;
 import dodochazoenterprise.journeydiaries.databinding.JourneysFragmentBinding;
 import dodochazoenterprise.journeydiaries.model.Journey;
+import dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel;
 
 /**
  * Created by Romain on 09/10/2017.
  */
 
 public class JourneyManageFragment extends Fragment {
+    private Journey journey = null;
 
+    public JourneyManageFragment(Journey journey){
+        super();
+        this.journey = journey;
+    }
 
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+                             Bundle savedInstanceState) {
+        JourneyManageBinding binding =
+                DataBindingUtil.inflate(inflater, R.layout.journey_manage, container, false);
+        binding.setJvm(new JourneyViewModel(binding.getRoot().getContext(), journey));
+        return binding.getRoot();
+    }
 }

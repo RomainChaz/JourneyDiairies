@@ -17,6 +17,7 @@ import java.util.List;
 import dodochazoenterprise.journeydiaries.R;
 import dodochazoenterprise.journeydiaries.databinding.JourneysFragmentBinding;
 import dodochazoenterprise.journeydiaries.model.Journey;
+import dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel;
 
 /**
  * Created by Romain on 09/10/2017.
@@ -28,7 +29,7 @@ public class JourneysFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         JourneysFragmentBinding binding =
-                DataBindingUtil.inflate(inflater, R.layout.journeys_fragment,container,false);
+                DataBindingUtil.inflate(inflater,R.layout.journeys_fragment,container,false);
         binding.journeysList.setLayoutManager(new
                 LinearLayoutManager(binding.getRoot().getContext()));
         List<Journey> journeys = new ArrayList<>();
@@ -50,7 +51,8 @@ public class JourneysFragment extends Fragment {
         calBegin.setTime(new Date("09/11/2017"));
         journeys.add(new Journey("Lyon", calBegin, calEnd));
 
-        binding.journeysList.setAdapter(new JourneyListAdapter(journeys));
+        binding.journeysList.setAdapter(new JourneyListAdapter(binding.getRoot().getContext(), journeys));
+        binding.setJvm(new JourneyViewModel(binding.getRoot().getContext(), new Journey()));
         return binding.getRoot();
     }
 }
