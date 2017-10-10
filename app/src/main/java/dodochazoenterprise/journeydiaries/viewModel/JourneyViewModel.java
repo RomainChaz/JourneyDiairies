@@ -3,6 +3,7 @@ package dodochazoenterprise.journeydiaries.viewModel;
 import android.content.Context;
 import android.databinding.BaseObservable;
 import android.databinding.Bindable;
+import android.databinding.ObservableField;
 import android.support.design.widget.TextInputEditText;
 import android.widget.TextView;
 
@@ -10,6 +11,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import dodochazoenterprise.journeydiaries.MainActivity;
@@ -24,10 +26,13 @@ public class JourneyViewModel extends BaseObservable {
     private Journey journey;
     private Context context;
     private String state;
+
     public JourneyViewModel(Context context, Journey journey) {
         this.journey = journey;
         this.context = context;
+        this.state = ( this.journey == null || this.journey.getName() == "") ? "Create" : "Update";
     }
+
     @Bindable
     public String getState() {
         return this.state;
@@ -54,10 +59,10 @@ public class JourneyViewModel extends BaseObservable {
     public void onJourneyClick() {
 
         if (journey == null){
-            state="Create";
+            this.state = "Create";
             ((MainActivity) context).showManage(new Journey());
-        }else{
-            state="Update";
+        }else {
+            this.state = "Update";
             ((MainActivity) context).showManage(journey);
         }
     }
@@ -69,10 +74,13 @@ public class JourneyViewModel extends BaseObservable {
         Calendar calEnd = Calendar.getInstance();
         calBegin.setTime(new Date(from));
         calEnd.setTime(new Date(to));
-        this.journey.setName(name);
-        this.journey.setFrom(calBegin);
-        this.journey.setTo(calEnd);
 
+        if (state == "Update"){
+            this.journey.setName(name);
+            this.journey.setFrom(calBegin);
+            this.journey.setTo(calEnd);
+        }else{
+        }
         ((MainActivity) context).returnStartup();
     }
 }

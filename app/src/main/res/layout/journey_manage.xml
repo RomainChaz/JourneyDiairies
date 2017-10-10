@@ -6,10 +6,6 @@
             name="jvm"
             type="dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel"
             />
-        <variable
-            name="state"
-            type="dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel"
-            />
     </data>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
@@ -29,7 +25,7 @@
         android:layout_toStartOf="@+id/buttonUpdate" />
 
     <Button
-        android:text="@{state}"
+        android:text="@{jvm.state}"
         android:onClick="@{() -> jvm.save(editName.getText().toString(), editFrom.getText().toString(), editTo.getText().toString())}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
