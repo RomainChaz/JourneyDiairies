@@ -24,36 +24,53 @@ import dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel;
  */
 
 public class JourneysFragment extends Fragment {
+
+    private JourneysFragmentBinding binding;
+    private List<Journey> journeys;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
-        JourneysFragmentBinding binding =
-                DataBindingUtil.inflate(inflater,R.layout.journeys_fragment,container,false);
-        binding.journeysList.setLayoutManager(new
-                LinearLayoutManager(binding.getRoot().getContext()));
-        List<Journey> journeys = new ArrayList<>();
 
-        Calendar calBegin = Calendar.getInstance();
-        Calendar calEnd = Calendar.getInstance();
-        calBegin.setTime(new Date("07/01/2017"));
-        calEnd.setTime(new Date("09/01/2017"));
-        journeys.add(new Journey("Los Angeles", calBegin, calEnd));
+        if(savedInstanceState == null && journeys == null) {
+            // Initialization of the list
+            journeys = new ArrayList<>();
 
-        calBegin = Calendar.getInstance();
-        calEnd = Calendar.getInstance();
-        calBegin.setTime(new Date("09/02/2017"));
-        calEnd.setTime(new Date("09/11/2017"));
-        journeys.add(new Journey("Dublin", calBegin, calEnd));
+            Calendar calBegin = Calendar.getInstance();
+            Calendar calEnd = Calendar.getInstance();
+            calBegin.setTime(new Date("07/01/2017"));
+            calEnd.setTime(new Date("09/01/2017"));
+            journeys.add(new Journey("Los Angeles", calBegin, calEnd));
 
-        calBegin = Calendar.getInstance();
-        calEnd = Calendar.getInstance();
-        calBegin.setTime(new Date("09/11/2017"));
-        journeys.add(new Journey("Lyon", calBegin, calEnd));
+            calBegin = Calendar.getInstance();
+            calEnd = Calendar.getInstance();
+            calBegin.setTime(new Date("09/02/2017"));
+            calEnd.setTime(new Date("09/11/2017"));
+            journeys.add(new Journey("Dublin", calBegin, calEnd));
 
-        binding.journeysList.setAdapter(new JourneyListAdapter(binding.getRoot().getContext(), journeys));
-        binding.setJvm(new JourneyViewModel(binding.getRoot().getContext(), new Journey()));
+            calBegin = Calendar.getInstance();
+            calEnd = Calendar.getInstance();
+            calBegin.setTime(new Date("09/11/2017"));
+            journeys.add(new Journey("Lyon", calBegin, calEnd));
+
+            binding =
+                    DataBindingUtil.inflate(inflater, R.layout.journeys_fragment, container, false);
+            binding.journeysList.setLayoutManager(new
+                    LinearLayoutManager(binding.getRoot().getContext()));
+            binding.journeysList.setAdapter(new JourneyListAdapter(binding.getRoot().getContext(), journeys));
+            binding.setJvm(new JourneyViewModel(binding.getRoot().getContext(), null, state));
+        }
         return binding.getRoot();
+    }
+
+    public void update(){
+        binding.journeysList.getAdapter().notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }
 

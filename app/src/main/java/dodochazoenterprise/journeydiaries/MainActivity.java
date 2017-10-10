@@ -4,6 +4,7 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
@@ -31,11 +32,30 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container,fragment);
         transaction.commit();
     }
-    public void showManage(Journey journey){
+    public void showManage(Journey journey) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        JourneyManageFragment fragment = new JourneyManageFragment(journey);
+        transaction.addToBackStack(null);
+        JourneyManageFragment fragment;
+        if (journey != null) {
+            fragment = new JourneyManageFragment(journey, "update");
+        } else {
+            fragment = new JourneyManageFragment(new Journey(), "create");
+        }
         transaction.replace(R.id.fragment_container,fragment);
         transaction.commit();
+    }
+    public void returnStartup() {
+        FragmentManager manager = getFragmentManager();
+        manager.popBackStackImmediate();
+        JourneysFragment fragment = (JourneysFragment) manager.findFragmentById(R.id.fragment_container);
+        fragment.update();
+    }
+
+
+
+    @Override
+    public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistenState) {
+        super.onSaveInstanceState(outState, outPersistenState);
     }
 }

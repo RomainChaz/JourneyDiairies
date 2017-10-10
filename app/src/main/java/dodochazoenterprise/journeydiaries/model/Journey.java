@@ -1,5 +1,7 @@
 package dodochazoenterprise.journeydiaries.model;
 
+import android.databinding.Bindable;
+
 import java.util.Calendar;
 
 /**
