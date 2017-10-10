@@ -21,11 +21,9 @@ class JourneyListAdapter extends RecyclerView.Adapter<JourneyListAdapter.Binding
 {
     private List<Journey> journeys;
     private Context context;
-    private String state;
     JourneyListAdapter(Context context, List<Journey> journeys) {
         this.journeys = journeys;
         this.context = context;
-        this.state = ;
     }
     @Override
     public BindingHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -39,7 +37,7 @@ class JourneyListAdapter extends RecyclerView.Adapter<JourneyListAdapter.Binding
             position) {
         JourneyItemBinding binding = holder.binding;
 
-        binding.setJvm(new JourneyViewModel(this.context, journeys.get(position), state));
+        binding.setJvm(new JourneyViewModel(this.context, journeys.get(position)));
 
     }
     @Override

@@ -32,12 +32,12 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container,fragment);
         transaction.commit();
     }
-    public void showManage(Journey journey, String state) {
+    public void showManage(Journey journey) {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.addToBackStack(null);
         JourneyManageFragment fragment;
-        fragment = new JourneyManageFragment(journey, state);
+        fragment = new JourneyManageFragment(journey);
 
         transaction.replace(R.id.fragment_container,fragment);
         transaction.commit();

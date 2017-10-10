@@ -28,7 +28,6 @@ public class JourneyViewModel extends BaseObservable {
         this.journey = journey;
         this.context = context;
     }
-
     @Bindable
     public String getState() {
         return this.state;
@@ -53,14 +52,14 @@ public class JourneyViewModel extends BaseObservable {
         return format.format(cal.getTime());
     }
     public void onJourneyClick() {
+
         if (journey == null){
             state="Create";
-            ((MainActivity) context).showManage(new Journey(), "Create");
+            ((MainActivity) context).showManage(new Journey());
         }else{
             state="Update";
-            ((MainActivity) context).showManage(journey, "Update");
+            ((MainActivity) context).showManage(journey);
         }
-
     }
     public void onCancelClick(){
         ((MainActivity) context).returnStartup();

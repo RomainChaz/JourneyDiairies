@@ -30,19 +30,17 @@ import dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel;
 
 public class JourneyManageFragment extends Fragment {
     private Journey journey = null;
-    private String state = null;
 
-    public JourneyManageFragment(Journey journey, String state) {
+    public JourneyManageFragment(Journey journey) {
         super();
         this.journey = journey;
-        this.state = state;
     }
 
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         JourneyManageBinding binding =
                 DataBindingUtil.inflate(inflater, R.layout.journey_manage, container, false);
-        binding.setJvm(new JourneyViewModel(binding.getRoot().getContext(), journey, state));
+        binding.setJvm(new JourneyViewModel(binding.getRoot().getContext(), journey));
         return binding.getRoot();
     }
 }

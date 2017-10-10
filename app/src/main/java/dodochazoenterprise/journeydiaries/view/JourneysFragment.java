@@ -37,8 +37,6 @@ public class JourneysFragment extends Fragment {
             // Initialization of the list
             journeys = creation();
 
-
-
             binding =DataBindingUtil.inflate(inflater, R.layout.journeys_fragment, container, false);
 
             binding.journeysList.setLayoutManager(new
