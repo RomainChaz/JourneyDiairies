@@ -39,6 +39,11 @@ public class JourneyViewModel extends BaseObservable {
     }
 
     @Bindable
+    public int getId() {
+        return journey.getId();
+    }
+
+    @Bindable
     public String getName() {
         return journey.getName();
     }
@@ -69,17 +74,19 @@ public class JourneyViewModel extends BaseObservable {
     public void onCancelClick(){
         ((MainActivity) context).returnStartup();
     }
-    public void save(String name, String from, String to) {
+    public void save(int id, String name, String from, String to) {
         Calendar calBegin = Calendar.getInstance();
         Calendar calEnd = Calendar.getInstance();
         calBegin.setTime(new Date(from));
         calEnd.setTime(new Date(to));
 
         if (state == "Update"){
+            this.journey.setId(id);
             this.journey.setName(name);
             this.journey.setFrom(calBegin);
             this.journey.setTo(calEnd);
         }else{
+
         }
         ((MainActivity) context).returnStartup();
     }

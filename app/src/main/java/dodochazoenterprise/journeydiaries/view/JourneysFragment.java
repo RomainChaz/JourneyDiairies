@@ -53,18 +53,18 @@ public class JourneysFragment extends Fragment {
         Calendar calEnd = Calendar.getInstance();
         calBegin.setTime(new Date("07/01/2017"));
         calEnd.setTime(new Date("09/01/2017"));
-        journeys.add(new Journey("Los Angeles", calBegin, calEnd));
+        journeys.add(new Journey(1, "Los Angeles", calBegin, calEnd));
 
         calBegin = Calendar.getInstance();
         calEnd = Calendar.getInstance();
         calBegin.setTime(new Date("09/02/2017"));
         calEnd.setTime(new Date("09/11/2017"));
-        journeys.add(new Journey("Dublin", calBegin, calEnd));
+        journeys.add(new Journey(2, "Dublin", calBegin, calEnd));
 
         calBegin = Calendar.getInstance();
         calEnd = Calendar.getInstance();
         calBegin.setTime(new Date("09/11/2017"));
-        journeys.add(new Journey("Lyon", calBegin, calEnd));
+        journeys.add(new Journey(3, "Lyon", calBegin, calEnd));
         return journeys;
     }
 

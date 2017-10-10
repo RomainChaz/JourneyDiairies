@@ -9,6 +9,7 @@ import java.util.Calendar;
  */
 
 public class Journey {
+    private int id;
     private String name;
     private Calendar from;
     private Calendar to;
@@ -17,7 +18,8 @@ public class Journey {
         from = Calendar.getInstance();
         to = Calendar.getInstance();
     }
-    public Journey(String name, Calendar from, Calendar to) {
+    public Journey(int id, String name, Calendar from, Calendar to) {
+        this.id = id;
         this.name = name;
         this.from = from;
         this.to = to;
@@ -39,5 +41,11 @@ public class Journey {
     }
     public void setName(String name) {
         this.name = name;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
     }
 }

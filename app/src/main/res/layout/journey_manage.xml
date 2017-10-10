@@ -26,7 +26,7 @@
 
     <Button
         android:text="@{jvm.state}"
-        android:onClick="@{() -> jvm.save(editName.getText().toString(), editFrom.getText().toString(), editTo.getText().toString())}"
+        android:onClick="@{() -> jvm.save(jvm.id, editName.getText().toString(), editFrom.getText().toString(), editTo.getText().toString())}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="50dp"
