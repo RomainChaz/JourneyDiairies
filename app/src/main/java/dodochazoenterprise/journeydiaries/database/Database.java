@@ -15,10 +15,10 @@ public class Database  extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "JourneyDiairies";
 
-    private static final int DATABASE_VERSION = 0;
+    private static final int DATABASE_VERSION = 1;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "create table JOURNEY( id integer primary key,name text not null, from date not null, to date not null);";
+    private static final String DATABASE_CREATE = "create table JOURNEY( id integer primary key auto_increment,name text not null, dateFrom date not null, dateTo date not null);";
 
     private Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

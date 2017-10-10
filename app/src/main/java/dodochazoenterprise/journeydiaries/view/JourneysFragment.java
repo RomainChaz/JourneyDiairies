@@ -1,6 +1,7 @@
 package dodochazoenterprise.journeydiaries.view;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -14,7 +15,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import dodochazoenterprise.journeydiaries.MainActivity;
 import dodochazoenterprise.journeydiaries.R;
+import dodochazoenterprise.journeydiaries.database.DatabaseImplementor;
 import dodochazoenterprise.journeydiaries.databinding.JourneysFragmentBinding;
 import dodochazoenterprise.journeydiaries.model.Journey;
 import dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel;
@@ -47,9 +50,21 @@ public class JourneysFragment extends Fragment {
         return binding.getRoot();
     }
 
-    private ArrayList<Journey> creation(){
-        ArrayList<Journey> journeys = new ArrayList<>();
+    private List<Journey> creation(){
+        List<Journey> journeys = new ArrayList<>();
+
+        DatabaseImplementor db = new DatabaseImplementor(this.getActivity());
+        journeys = db.getJourneys();
+
         Calendar calBegin = Calendar.getInstance();
+        Calendar calEnd = Calendar.getInstance();
+        calBegin.setTime(new Date("07/01/2017"));
+        calEnd.setTime(new Date("09/01/2017"));
+
+        db.create(new Journey(1, "Los Angeles", calBegin, calEnd));
+
+        journeys = db.getJourneys();
+       /* Calendar calBegin = Calendar.getInstance();
         Calendar calEnd = Calendar.getInstance();
         calBegin.setTime(new Date("07/01/2017"));
         calEnd.setTime(new Date("09/01/2017"));
@@ -64,7 +79,7 @@ public class JourneysFragment extends Fragment {
         calBegin = Calendar.getInstance();
         calEnd = Calendar.getInstance();
         calBegin.setTime(new Date("09/11/2017"));
-        journeys.add(new Journey(3, "Lyon", calBegin, calEnd));
+        journeys.add(new Journey(3, "Lyon", calBegin, calEnd));*/
         return journeys;
     }
 

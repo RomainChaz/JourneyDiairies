@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -22,18 +23,25 @@ public class DatabaseImplementor {
     Database mydb;
     SQLiteDatabase bdd;
     String table = "JOURNEY";
+    String id="id", name="name", dateFrom="dateFrom", dateTo="dateTo";
 
     public  DatabaseImplementor(Context context){
-        mydb.getInstance(context);
-
-    }
-
-    public void open(){
+        mydb = Database.getInstance(context);
         bdd = mydb.getWritableDatabase();
     }
 
     public List<Journey> getJourneys(){
-        Cursor c = bdd.query(table, null, null, null, null, null, null);
+        Cursor c = null;
+        bdd.beginTransaction();
+        try{
+        c = bdd.query(table, null, null, null, null, null, null);
+            bdd.setTransactionSuccessful();
+        }catch(Exception e){
+            Log.e("BDD", "Impossible de récupérer les journées");
+        }finally {
+            bdd.endTransaction();
+        }
+
         return cursorToJourneys(c);
     }
 
@@ -41,22 +49,33 @@ public class DatabaseImplementor {
     public long create(Journey journey){
         //Création d'un ContentValues (fonctionne comme une HashMap)
         ContentValues values = new ContentValues();
-        //on lui ajoute une valeur associée à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
-        values.put("1", journey.getName());
-        values.put("2", convertCalendarToString(journey.getFrom()));
-        values.put("3", convertCalendarToString(journey.getTo()));
-        //on insère l'objet dans la BDD via le ContentValues
-        return bdd.insert(table, null, values);
+        long inserted = 0;
+        bdd.beginTransaction();
+        try{
+            //on lui ajoute une valeur associée à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
+            values.put(name, journey.getName());
+            values.put(dateFrom, convertCalendarToString(journey.getFrom()));
+            values.put(dateTo, convertCalendarToString(journey.getTo()));
+            //on insère l'objet dans la BDD via le ContentValues
+            inserted = bdd.insert(table, null, values);
+            bdd.setTransactionSuccessful();
+        }catch(Exception e){
+            Log.e("BDD", "Impossible d'ajouter");
+        }finally {
+            bdd.endTransaction();
+        }
+
+        return inserted;
     }
 
     public int update(int id, Journey journey){
         //La mise à jour d'un livre dans la BDD fonctionne plus ou moins comme une insertion
         //il faut simplement préciser quel livre on doit mettre à jour grâce à l'ID
         ContentValues values = new ContentValues();
-        //values.put("0",journey.getId());
-        values.put("1", journey.getName());
-        values.put("2", convertCalendarToString(journey.getFrom()));
-        values.put("2", convertCalendarToString(journey.getTo()));
+        values.put(this.id,journey.getId());
+        values.put(name, journey.getName());
+        values.put(dateFrom, convertCalendarToString(journey.getFrom()));
+        values.put(dateTo, convertCalendarToString(journey.getTo()));
         return bdd.update(table, values, "Id" + " = " +id, null);
     }
 
@@ -74,8 +93,8 @@ public class DatabaseImplementor {
         do {
             Journey j = new Journey();
             //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
-
-            //j.setId(c.getInt(0));
+            int col=0;
+            j.setId(c.getInt(col++));
             j.setName(c.getString(1));
 
             j.setFrom(convertStringToCalendar(c.getString(2)));

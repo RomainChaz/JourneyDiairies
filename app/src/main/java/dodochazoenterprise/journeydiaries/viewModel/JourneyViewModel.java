@@ -16,6 +16,7 @@ import java.util.Locale;
 
 import dodochazoenterprise.journeydiaries.MainActivity;
 import dodochazoenterprise.journeydiaries.R;
+import dodochazoenterprise.journeydiaries.database.DatabaseImplementor;
 import dodochazoenterprise.journeydiaries.model.Journey;
 
 /**
@@ -86,7 +87,6 @@ public class JourneyViewModel extends BaseObservable {
             this.journey.setFrom(calBegin);
             this.journey.setTo(calEnd);
         }else{
-
         }
         ((MainActivity) context).returnStartup();
     }
