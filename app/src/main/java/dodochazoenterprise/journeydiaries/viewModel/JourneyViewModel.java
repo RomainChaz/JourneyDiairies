@@ -24,10 +24,9 @@ public class JourneyViewModel extends BaseObservable {
     private Journey journey;
     private Context context;
     private String state;
-    public JourneyViewModel(Context context, Journey journey, String state) {
+    public JourneyViewModel(Context context, Journey journey) {
         this.journey = journey;
         this.context = context;
-        this.state = state;
     }
 
     @Bindable
@@ -55,10 +54,13 @@ public class JourneyViewModel extends BaseObservable {
     }
     public void onJourneyClick() {
         if (journey == null){
-            ((MainActivity) context).showManage(new Journey());
+            state="Create";
+            ((MainActivity) context).showManage(new Journey(), "Create");
         }else{
-            ((MainActivity) context).showManage(journey);
+            state="Update";
+            ((MainActivity) context).showManage(journey, "Update");
         }
+
     }
     public void onCancelClick(){
         ((MainActivity) context).returnStartup();

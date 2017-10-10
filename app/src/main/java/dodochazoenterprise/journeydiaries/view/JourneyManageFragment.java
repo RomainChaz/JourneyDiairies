@@ -33,9 +33,6 @@ public class JourneyManageFragment extends Fragment {
     private String state = null;
 
     public JourneyManageFragment(Journey journey, String state) {
-    }
-
-    public JourneyManageFragment(Journey journey){
         super();
         this.journey = journey;
         this.state = state;

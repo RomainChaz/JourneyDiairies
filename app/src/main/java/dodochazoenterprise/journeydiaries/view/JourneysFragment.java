@@ -35,33 +35,39 @@ public class JourneysFragment extends Fragment {
 
         if(savedInstanceState == null && journeys == null) {
             // Initialization of the list
-            journeys = new ArrayList<>();
+            journeys = creation();
 
-            Calendar calBegin = Calendar.getInstance();
-            Calendar calEnd = Calendar.getInstance();
-            calBegin.setTime(new Date("07/01/2017"));
-            calEnd.setTime(new Date("09/01/2017"));
-            journeys.add(new Journey("Los Angeles", calBegin, calEnd));
 
-            calBegin = Calendar.getInstance();
-            calEnd = Calendar.getInstance();
-            calBegin.setTime(new Date("09/02/2017"));
-            calEnd.setTime(new Date("09/11/2017"));
-            journeys.add(new Journey("Dublin", calBegin, calEnd));
 
-            calBegin = Calendar.getInstance();
-            calEnd = Calendar.getInstance();
-            calBegin.setTime(new Date("09/11/2017"));
-            journeys.add(new Journey("Lyon", calBegin, calEnd));
+            binding =DataBindingUtil.inflate(inflater, R.layout.journeys_fragment, container, false);
 
-            binding =
-                    DataBindingUtil.inflate(inflater, R.layout.journeys_fragment, container, false);
             binding.journeysList.setLayoutManager(new
                     LinearLayoutManager(binding.getRoot().getContext()));
             binding.journeysList.setAdapter(new JourneyListAdapter(binding.getRoot().getContext(), journeys));
-            binding.setJvm(new JourneyViewModel(binding.getRoot().getContext(), null, state));
+            binding.setJvm(new JourneyViewModel(binding.getRoot().getContext(), null));
         }
         return binding.getRoot();
+    }
+
+    private ArrayList<Journey> creation(){
+        ArrayList<Journey> journeys = new ArrayList<>();
+        Calendar calBegin = Calendar.getInstance();
+        Calendar calEnd = Calendar.getInstance();
+        calBegin.setTime(new Date("07/01/2017"));
+        calEnd.setTime(new Date("09/01/2017"));
+        journeys.add(new Journey("Los Angeles", calBegin, calEnd));
+
+        calBegin = Calendar.getInstance();
+        calEnd = Calendar.getInstance();
+        calBegin.setTime(new Date("09/02/2017"));
+        calEnd.setTime(new Date("09/11/2017"));
+        journeys.add(new Journey("Dublin", calBegin, calEnd));
+
+        calBegin = Calendar.getInstance();
+        calEnd = Calendar.getInstance();
+        calBegin.setTime(new Date("09/11/2017"));
+        journeys.add(new Journey("Lyon", calBegin, calEnd));
+        return journeys;
     }
 
     public void update(){
