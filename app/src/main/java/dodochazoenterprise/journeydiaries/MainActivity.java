@@ -3,6 +3,7 @@ package dodochazoenterprise.journeydiaries;
 import android.Manifest;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
@@ -13,6 +14,7 @@ import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 
 import java.util.ArrayList;
@@ -30,54 +32,7 @@ import dodochazoenterprise.journeydiaries.view.JourneysFragment;
 
 public class MainActivity extends AppCompatActivity {
     private MainActivityBinding binding;
-    LocationManager manager = (LocationManager) getSystemService(this.LOCATION_SERVICE);
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
-        this.showStartup();
-    }
-
-    public void showStartup() {
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        JourneysFragment fragment = new JourneysFragment();
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
-    }
-
-    public void showManage(Journey journey) {
-        FragmentManager manager = getFragmentManager();
-        FragmentTransaction transaction = manager.beginTransaction();
-        transaction.addToBackStack(null);
-        JourneyManageFragment fragment;
-        fragment = new JourneyManageFragment(journey);
-
-        transaction.replace(R.id.fragment_container, fragment);
-        transaction.commit();
-    }
-
-    public void returnStartup(boolean changed) {
-        manager.removeUpdates(myLocationListener);
-
-        FragmentManager manager = getFragmentManager();
-        manager.popBackStackImmediate();
-        JourneysFragment fragment = (JourneysFragment) manager.findFragmentById(R.id.fragment_container);
-        fragment.update(changed);
-    }
-
-    public void showMap(boolean changed) {
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
-            ActivityCompat.requestPermissions(this, permissions, 1);
-        }
-        FragmentManager manager = getFragmentManager();
-        manager.popBackStackImmediate();
-        JourneysFragment fragment = (JourneysFragment) manager.findFragmentById(R.id.fragment_container);
-        fragment.update(changed);
-    }
-
-    LocationListener myLocationListener = new
+    private LocationListener myLocationListener = new
             LocationListener() {
                 @Override
                 public void onLocationChanged(Location newLocation) {
@@ -96,14 +51,80 @@ public class MainActivity extends AppCompatActivity {
                 public void onProviderDisabled(String provider) {
                 }
             };
+    private static final int MY_LOCATION_REQUEST_CODE = 1;
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
+        this.showStartup();
+    }
+
+    public void showStartup() {
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        JourneysFragment fragment = new JourneysFragment();
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+            ActivityCompat.requestPermissions(this, permissions, 1);
+        }
+    }
+
+    public void showManage(Journey journey) {
+        FragmentManager manager = getFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.addToBackStack(null);
+        JourneyManageFragment fragment;
+        fragment = new JourneyManageFragment(journey);
+
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+    }
+
+    public void returnStartup(boolean changed) {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.removeUpdates(myLocationListener);
+
+        FragmentManager manager = getFragmentManager();
+        manager.popBackStackImmediate();
+        JourneysFragment fragment = (JourneysFragment) manager.findFragmentById(R.id.fragment_container);
+        fragment.update(changed);
+    }
+
+    public void showMap(boolean changed) {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+            ActivityCompat.requestPermissions(this, permissions, 1);
+        }
+        FragmentManager manager = getFragmentManager();
+        manager.popBackStackImmediate();
+        JourneysFragment fragment = (JourneysFragment) manager.findFragmentById(R.id.fragment_container);
+        fragment.update(changed);
+    }
+
+
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull final String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 120, 100, myLocationListener);
-        manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 120, 100, myLocationListener);
+
+            if (permissions.length == 1 && permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                try {
+                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 120L, 100.0f, myLocationListener);
+                    manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 120L, 100.0f, myLocationListener);
+                } catch (SecurityException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                // Permission was denied. Display an error message.
+
+            }
+
+
 
     }
 
