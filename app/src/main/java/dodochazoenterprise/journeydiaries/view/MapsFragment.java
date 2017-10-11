@@ -32,6 +32,10 @@ import dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback, LocationSource {
 
+    GoogleMap map;
+    private Location currentLocation;
+    public OnLocationChangedListener onLocationChangeListener;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
@@ -47,7 +51,8 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
     @Override
     public void onMapReady(GoogleMap map) {
-        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        this.map = map;
+        if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
             map.setLocationSource(this);
 
@@ -58,11 +63,19 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
     @Override
     public void activate(OnLocationChangedListener onLocationChangedListener) {
-
+        this.onLocationChangeListener = onLocationChangedListener;
     }
 
     @Override
     public void deactivate() {
+        this.onLocationChangeListener = null;
+    }
 
+    public Location getCurrentLocation(){
+        return currentLocation;
+    }
+
+    public interface LocationInterface {
+        public void setLocation(Location location);
     }
 }

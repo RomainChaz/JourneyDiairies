@@ -1,6 +1,7 @@
 package dodochazoenterprise.journeydiaries;
 
 import android.Manifest;
+import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
@@ -18,10 +19,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import dodochazoenterprise.journeydiaries.database.DatabaseImplementor;
 import dodochazoenterprise.journeydiaries.databinding.MainActivityBinding;
 import dodochazoenterprise.journeydiaries.model.Journey;
 import dodochazoenterprise.journeydiaries.view.JourneyManageFragment;
@@ -32,13 +29,16 @@ import dodochazoenterprise.journeydiaries.view.MapsFragment;
  * Created by Romain on 09/10/2017.
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MapsFragment.LocationInterface {
     private MainActivityBinding binding;
+    private MapsFragment mapsFragment;
+
     private LocationListener myLocationListener = new
             LocationListener() {
                 @Override
                 public void onLocationChanged(Location newLocation) {
-                    onLocationChangedListener.onLocationChanged(newLocation);
+                    if(mapsFragment != null && mapsFragment.onLocationChangeListener != null)
+                        mapsFragment.onLocationChangeListener.onLocationChanged(newLocation);
                 }
 
                 @Override
@@ -91,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             locationManager.removeUpdates(myLocationListener);
-            return;
         }
 
         FragmentManager manager = getFragmentManager();
@@ -107,14 +106,17 @@ public class MainActivity extends AppCompatActivity {
                 String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
                 ActivityCompat.requestPermissions(this, permissions, 1);
             }
+        } else {
+            LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+            manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 10L, 100.0f, myLocationListener);
+            manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 120L, 100.0f, myLocationListener);
         }
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.addToBackStack(null);
-        MapsFragment fragment;
-        fragment = new MapsFragment();
+        mapsFragment = new MapsFragment();
 
-        transaction.replace(R.id.fragment_container, fragment);
+        transaction.replace(R.id.fragment_container, mapsFragment);
         transaction.commit();
     }
 
@@ -139,7 +141,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        FragmentManager manager = getFragmentManager();
+        Fragment fragment = manager.findFragmentById(R.id.fragment_container);
+        if(fragment instanceof  MapsFragment)
+            mapsFragment = null;
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistenState) {
         super.onSaveInstanceState(outState, outPersistenState);
+    }
+
+    @Override
+    public void setLocation(Location location) {
+
     }
 }
