@@ -5,5 +5,4 @@
     <string name="journey_created">Journy successfully created</string>
     <string name="journey_updated">Journy successfully updated</string>
     <string name="googleKey">AIzaSyAVBVxhYkWNz2BgwE_ycD8B0uEGOzQKaRY</string>
-    <integer name="google_play_services_version">8</integer>
 </resources>

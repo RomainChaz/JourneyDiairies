@@ -86,13 +86,17 @@ public class JourneyViewModel extends BaseObservable {
 
     public void onDeleteClick() {
         DatabaseImplementor db = new DatabaseImplementor((MainActivity) context);
-        if(stateReturn.equals("Delete")){
+        if (stateReturn.equals("Delete")) {
             db.delete(this.journey.getId());
 
             Toast toast = Toast.makeText(context, ((MainActivity) context).getResources().getString(R.string.journey_deleted), Toast.LENGTH_SHORT);
             toast.show();
         }
         ((MainActivity) context).returnStartup(Boolean.FALSE);
+    }
+
+    public void onMapClick() {
+        ((MainActivity) context).showMap();
     }
 
     public void save(int id, String name, String from, String to) {

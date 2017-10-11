@@ -34,19 +34,19 @@ public class JourneysFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
 
-        if(savedInstanceState == null && journeys == null) {
+        if (savedInstanceState == null && journeys == null) {
             // Initialization of the list
             journeys = getJourneys();
 
             this.inflater = inflater;
-            this.container=container;
+            this.container = container;
             bindJourneys();
         }
         return binding.getRoot();
     }
 
     private void bindJourneys() {
-        binding =DataBindingUtil.inflate(inflater, R.layout.journeys_fragment, container, false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.journeys_fragment, container, false);
 
         binding.journeysList.setLayoutManager(new
                 LinearLayoutManager(binding.getRoot().getContext()));
@@ -54,7 +54,7 @@ public class JourneysFragment extends Fragment {
         binding.setJvm(new JourneyViewModel(binding.getRoot().getContext(), null));
     }
 
-    private List<Journey> getJourneys(){
+    private List<Journey> getJourneys() {
         List<Journey> journeys = new ArrayList<>();
 
         DatabaseImplementor db = new DatabaseImplementor(this.getActivity());
@@ -67,9 +67,9 @@ public class JourneysFragment extends Fragment {
         return new JourneysFragment();
     }
 
-    public void update(boolean changed){
-        if(changed){
-        getJourneys();
+    public void update(boolean changed) {
+        if (changed) {
+            getJourneys();
         }
 
         getFragmentManager().beginTransaction()

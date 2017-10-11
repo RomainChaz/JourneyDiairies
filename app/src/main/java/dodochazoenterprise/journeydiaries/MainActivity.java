@@ -16,6 +16,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +26,7 @@ import dodochazoenterprise.journeydiaries.databinding.MainActivityBinding;
 import dodochazoenterprise.journeydiaries.model.Journey;
 import dodochazoenterprise.journeydiaries.view.JourneyManageFragment;
 import dodochazoenterprise.journeydiaries.view.JourneysFragment;
+import dodochazoenterprise.journeydiaries.view.MapsFragment;
 
 /**
  * Created by Romain on 09/10/2017.
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
             LocationListener() {
                 @Override
                 public void onLocationChanged(Location newLocation) {
+                    onLocationChangedListener.onLocationChanged(newLocation);
                 }
 
                 @Override
@@ -51,7 +54,9 @@ public class MainActivity extends AppCompatActivity {
                 public void onProviderDisabled(String provider) {
                 }
             };
+
     private static final int MY_LOCATION_REQUEST_CODE = 1;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,7 +89,10 @@ public class MainActivity extends AppCompatActivity {
 
     public void returnStartup(boolean changed) {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        locationManager.removeUpdates(myLocationListener);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            locationManager.removeUpdates(myLocationListener);
+            return;
+        }
 
         FragmentManager manager = getFragmentManager();
         manager.popBackStackImmediate();
@@ -92,17 +100,23 @@ public class MainActivity extends AppCompatActivity {
         fragment.update(changed);
     }
 
-    public void showMap(boolean changed) {
+    public void showMap() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
-            ActivityCompat.requestPermissions(this, permissions, 1);
+            if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+            } else {
+                String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
+                ActivityCompat.requestPermissions(this, permissions, 1);
+            }
         }
         FragmentManager manager = getFragmentManager();
-        manager.popBackStackImmediate();
-        JourneysFragment fragment = (JourneysFragment) manager.findFragmentById(R.id.fragment_container);
-        fragment.update(changed);
-    }
+        FragmentTransaction transaction = manager.beginTransaction();
+        transaction.addToBackStack(null);
+        MapsFragment fragment;
+        fragment = new MapsFragment();
 
+        transaction.replace(R.id.fragment_container, fragment);
+        transaction.commit();
+    }
 
 
     @Override
@@ -111,23 +125,18 @@ public class MainActivity extends AppCompatActivity {
         LocationManager manager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
 
-
-            if (permissions.length == 1 && permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                try {
-                    manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 120L, 100.0f, myLocationListener);
-                    manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 120L, 100.0f, myLocationListener);
-                } catch (SecurityException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                // Permission was denied. Display an error message.
-
+        if (permissions.length == 1 && permissions[0].equals(Manifest.permission.ACCESS_FINE_LOCATION) && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            try {
+                manager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 120L, 100.0f, myLocationListener);
+                manager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 120L, 100.0f, myLocationListener);
+            } catch (SecurityException e) {
+                e.printStackTrace();
             }
-
-
-
+        } else {
+            Toast toast = Toast.makeText(this, "Permission Denied", Toast.LENGTH_SHORT);
+            toast.show();
+        }
     }
-
 
     @Override
     public void onSaveInstanceState(Bundle outState, PersistableBundle outPersistenState) {
