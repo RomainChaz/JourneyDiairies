@@ -2,6 +2,7 @@ package dodochazoenterprise.journeydiaries.view;
 
 import android.Manifest;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
@@ -27,9 +28,11 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.ArrayList;
 import java.util.List;
 
+import dodochazoenterprise.journeydiaries.MainActivity;
 import dodochazoenterprise.journeydiaries.R;
 import dodochazoenterprise.journeydiaries.databinding.JourneyManageBinding;
 import dodochazoenterprise.journeydiaries.databinding.MapsFragmentBinding;
+import dodochazoenterprise.journeydiaries.model.Journey;
 import dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel;
 
 /**
@@ -40,9 +43,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
     public GoogleMap map;
     private Location currentLocation;
+    private Context context;
     public OnLocationChangedListener onLocationChangeListener;
     //TODO: Use database
     private List<LatLng> positions;
+
+    public MapsFragment(Context context){
+        this.context = context;
+    }
 
     @Nullable
     @Override
@@ -88,6 +96,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     private void addMarker(LatLng point) {
         positions.add(point);
         map.addMarker(new MarkerOptions().position(point));
+
+        //TODO: Add link between MapsFragment and jvm.JourneyClick() whitout use of xml
+        ((MainActivity) context).showManage(new Journey());
     }
 
 

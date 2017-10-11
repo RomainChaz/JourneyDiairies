@@ -114,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.addToBackStack(null);
-        mapsFragment = new MapsFragment();
+        mapsFragment = new MapsFragment(this);
 
         transaction.replace(R.id.fragment_container, mapsFragment);
         transaction.commit();
