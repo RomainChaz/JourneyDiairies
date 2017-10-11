@@ -13,8 +13,8 @@
 
 
     <Button
-        android:text="Cancel"
-        android:onClick="@{() -> jvm.onCancelClick()}"
+        android:text="@{jvm.stateReturn}"
+        android:onClick="@{() -> jvm.onDeleteClick()}"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"

@@ -1,7 +1,6 @@
 package dodochazoenterprise.journeydiaries.view;
 
 import android.app.Fragment;
-import android.content.Context;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -11,11 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
-import dodochazoenterprise.journeydiaries.MainActivity;
 import dodochazoenterprise.journeydiaries.R;
 import dodochazoenterprise.journeydiaries.database.DatabaseImplementor;
 import dodochazoenterprise.journeydiaries.databinding.JourneysFragmentBinding;
@@ -30,6 +26,8 @@ public class JourneysFragment extends Fragment {
 
     private JourneysFragmentBinding binding;
     private List<Journey> journeys;
+    private LayoutInflater inflater;
+    ViewGroup container;
 
     @Nullable
     @Override
@@ -38,52 +36,44 @@ public class JourneysFragment extends Fragment {
 
         if(savedInstanceState == null && journeys == null) {
             // Initialization of the list
-            journeys = creation();
+            journeys = getJourneys();
 
-            binding =DataBindingUtil.inflate(inflater, R.layout.journeys_fragment, container, false);
-
-            binding.journeysList.setLayoutManager(new
-                    LinearLayoutManager(binding.getRoot().getContext()));
-            binding.journeysList.setAdapter(new JourneyListAdapter(binding.getRoot().getContext(), journeys));
-            binding.setJvm(new JourneyViewModel(binding.getRoot().getContext(), null));
+            this.inflater = inflater;
+            this.container=container;
+            bindJourneys();
         }
         return binding.getRoot();
     }
 
-    private List<Journey> creation(){
+    private void bindJourneys() {
+        binding =DataBindingUtil.inflate(inflater, R.layout.journeys_fragment, container, false);
+
+        binding.journeysList.setLayoutManager(new
+                LinearLayoutManager(binding.getRoot().getContext()));
+        binding.journeysList.setAdapter(new JourneyListAdapter(binding.getRoot().getContext(), journeys));
+        binding.setJvm(new JourneyViewModel(binding.getRoot().getContext(), null));
+    }
+
+    private List<Journey> getJourneys(){
         List<Journey> journeys = new ArrayList<>();
 
         DatabaseImplementor db = new DatabaseImplementor(this.getActivity());
         journeys = db.getJourneys();
 
-        Calendar calBegin = Calendar.getInstance();
-        Calendar calEnd = Calendar.getInstance();
-        calBegin.setTime(new Date("07/01/2017"));
-        calEnd.setTime(new Date("09/01/2017"));
-
-        db.create(new Journey(1, "Los Angeles", calBegin, calEnd));
-
-        journeys = db.getJourneys();
-       /* Calendar calBegin = Calendar.getInstance();
-        Calendar calEnd = Calendar.getInstance();
-        calBegin.setTime(new Date("07/01/2017"));
-        calEnd.setTime(new Date("09/01/2017"));
-        journeys.add(new Journey(1, "Los Angeles", calBegin, calEnd));
-
-        calBegin = Calendar.getInstance();
-        calEnd = Calendar.getInstance();
-        calBegin.setTime(new Date("09/02/2017"));
-        calEnd.setTime(new Date("09/11/2017"));
-        journeys.add(new Journey(2, "Dublin", calBegin, calEnd));
-
-        calBegin = Calendar.getInstance();
-        calEnd = Calendar.getInstance();
-        calBegin.setTime(new Date("09/11/2017"));
-        journeys.add(new Journey(3, "Lyon", calBegin, calEnd));*/
         return journeys;
     }
 
-    public void update(){
+    public static JourneysFragment newInstance() {
+        return new JourneysFragment();
+    }
+
+    public void update(boolean changed){
+        if(changed){
+        getJourneys();
+        }
+
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, JourneysFragment.newInstance()).commit();
         binding.journeysList.getAdapter().notifyDataSetChanged();
     }
 

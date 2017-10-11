@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">JourneyDiaries</string>
+    <string name="journey_deleted">Journy successfully deleted</string>
+    <string name="delete">Delete</string>
+    <string name="journey_created">Journy successfully created</string>
+    <string name="journey_updated">Journy successfully updated</string>
 </resources>

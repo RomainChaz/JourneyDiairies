@@ -5,7 +5,10 @@ import android.databinding.BaseObservable;
 import android.databinding.Bindable;
 import android.databinding.ObservableField;
 import android.support.design.widget.TextInputEditText;
+import android.view.View;
+import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -27,11 +30,18 @@ public class JourneyViewModel extends BaseObservable {
     private Journey journey;
     private Context context;
     private String state;
+    private String stateReturn;
 
     public JourneyViewModel(Context context, Journey journey) {
         this.journey = journey;
         this.context = context;
-        this.state = ( this.journey == null || this.journey.getName() == "") ? "Create" : "Update";
+        this.state = (this.journey == null || this.journey.getName() == "") ? "Create" : "Update";
+        this.stateReturn = (this.journey == null || this.journey.getName() == "") ? "Cancel" : "Delete";
+    }
+
+    @Bindable
+    public String getStateReturn() {
+        return this.stateReturn;
     }
 
     @Bindable
@@ -62,32 +72,53 @@ public class JourneyViewModel extends BaseObservable {
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
         return format.format(cal.getTime());
     }
+
     public void onJourneyClick() {
 
-        if (journey == null){
+        if (journey == null) {
             this.state = "Create";
             ((MainActivity) context).showManage(new Journey());
-        }else {
+        } else {
             this.state = "Update";
             ((MainActivity) context).showManage(journey);
         }
     }
-    public void onCancelClick(){
-        ((MainActivity) context).returnStartup();
+
+    public void onDeleteClick() {
+        DatabaseImplementor db = new DatabaseImplementor((MainActivity) context);
+        if(stateReturn.equals("Delete")){
+            db.delete(this.journey.getId());
+
+            Toast toast = Toast.makeText(context, ((MainActivity) context).getResources().getString(R.string.journey_deleted), Toast.LENGTH_SHORT);
+            toast.show();
+        }
+        ((MainActivity) context).returnStartup(Boolean.FALSE);
     }
+
     public void save(int id, String name, String from, String to) {
         Calendar calBegin = Calendar.getInstance();
         Calendar calEnd = Calendar.getInstance();
         calBegin.setTime(new Date(from));
         calEnd.setTime(new Date(to));
 
-        if (state == "Update"){
+
+        DatabaseImplementor db = new DatabaseImplementor((MainActivity) context);
+
+        this.journey.setName(name);
+        this.journey.setFrom(calBegin);
+        this.journey.setTo(calEnd);
+        String result = "";
+        if (state == "Update") {
             this.journey.setId(id);
-            this.journey.setName(name);
-            this.journey.setFrom(calBegin);
-            this.journey.setTo(calEnd);
-        }else{
+            db.update(id, this.journey);
+            result = ((MainActivity) context).getResources().getString(R.string.journey_updated);
+        } else {
+            db.create(journey);
+            result = ((MainActivity) context).getResources().getString(R.string.journey_created);
         }
-        ((MainActivity) context).returnStartup();
+
+        Toast toast = Toast.makeText(context, result, Toast.LENGTH_SHORT);
+        toast.show();
+        ((MainActivity) context).returnStartup(Boolean.TRUE);
     }
 }

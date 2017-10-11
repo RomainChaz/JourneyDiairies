@@ -71,12 +71,40 @@ public class DatabaseImplementor {
     public int update(int id, Journey journey){
         //La mise à jour d'un livre dans la BDD fonctionne plus ou moins comme une insertion
         //il faut simplement préciser quel livre on doit mettre à jour grâce à l'ID
-        ContentValues values = new ContentValues();
-        values.put(this.id,journey.getId());
-        values.put(name, journey.getName());
-        values.put(dateFrom, convertCalendarToString(journey.getFrom()));
-        values.put(dateTo, convertCalendarToString(journey.getTo()));
-        return bdd.update(table, values, "Id" + " = " +id, null);
+        bdd.beginTransaction();
+        int updated=0;
+        try{
+            ContentValues values = new ContentValues();
+            values.put(this.id,journey.getId());
+            values.put(name, journey.getName());
+            values.put(dateFrom, convertCalendarToString(journey.getFrom()));
+            values.put(dateTo, convertCalendarToString(journey.getTo()));
+            updated = bdd.update(table, values, "Id" + " = " + id, null);
+            bdd.setTransactionSuccessful();
+        }catch(Exception e){
+            Log.e("BDD", "Impossible d'ajouter");
+        }finally {
+            bdd.endTransaction();
+        }
+
+        return updated;
+    }
+
+    public int delete(int id){
+        //La mise à jour d'un livre dans la BDD fonctionne plus ou moins comme une insertion
+        //il faut simplement préciser quel livre on doit mettre à jour grâce à l'ID
+        bdd.beginTransaction();
+        int deleted=0;
+        try{
+            deleted = bdd.delete(table,  "Id" + " = " + id, null);
+            bdd.setTransactionSuccessful();
+        }catch(Exception e){
+            Log.e("BDD", "Impossible d'ajouter");
+        }finally {
+            bdd.endTransaction();
+        }
+
+        return deleted;
     }
 
 

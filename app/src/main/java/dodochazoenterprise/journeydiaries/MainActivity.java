@@ -8,6 +8,10 @@ import android.os.PersistableBundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import dodochazoenterprise.journeydiaries.database.DatabaseImplementor;
 import dodochazoenterprise.journeydiaries.databinding.MainActivityBinding;
 import dodochazoenterprise.journeydiaries.model.Journey;
 import dodochazoenterprise.journeydiaries.view.JourneyManageFragment;
@@ -42,12 +46,13 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.fragment_container,fragment);
         transaction.commit();
     }
-    public void returnStartup() {
+    public void returnStartup(boolean changed) {
         FragmentManager manager = getFragmentManager();
         manager.popBackStackImmediate();
         JourneysFragment fragment = (JourneysFragment) manager.findFragmentById(R.id.fragment_container);
-        fragment.update();
+        fragment.update(changed);
     }
+
 
 
 

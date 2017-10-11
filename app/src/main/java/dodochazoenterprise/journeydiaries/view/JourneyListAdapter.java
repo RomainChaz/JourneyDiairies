@@ -30,6 +30,7 @@ class JourneyListAdapter extends RecyclerView.Adapter<JourneyListAdapter.Binding
         JourneyItemBinding binding =
                 DataBindingUtil.inflate(LayoutInflater.from(parent.getContext()),
                         R.layout.journey_item,parent,false);
+
         return new BindingHolder(binding);
     }
     @Override
