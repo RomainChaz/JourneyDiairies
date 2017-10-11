@@ -20,6 +20,12 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import dodochazoenterprise.journeydiaries.R;
 import dodochazoenterprise.journeydiaries.databinding.JourneyManageBinding;
@@ -32,19 +38,24 @@ import dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel;
 
 public class MapsFragment extends Fragment implements OnMapReadyCallback, LocationSource {
 
-    GoogleMap map;
+    public GoogleMap map;
     private Location currentLocation;
     public OnLocationChangedListener onLocationChangeListener;
+    //TODO: Use database
+    private List<LatLng> positions;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
-
+        positions = new ArrayList<>();
         MapsFragmentBinding binding = DataBindingUtil.inflate(inflater, R.layout.maps_fragment, container, false);
 
         MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
+
 
         return binding.getRoot();
     }
@@ -56,10 +67,29 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             map.setMyLocationEnabled(true);
             map.setLocationSource(this);
 
+            LatLng sydney = new LatLng(-33.852, 151.211);
+            map.addMarker(new MarkerOptions().position(sydney)
+                    .title("Marker in Sydney"));
+
+            map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+
+                @Override
+                public void onMapClick(LatLng point) {
+                    addMarker(point);
+                }
+            });
+
             return;
         }
 
     }
+
+
+    private void addMarker(LatLng point) {
+        positions.add(point);
+        map.addMarker(new MarkerOptions().position(point));
+    }
+
 
     @Override
     public void activate(OnLocationChangedListener onLocationChangedListener) {
