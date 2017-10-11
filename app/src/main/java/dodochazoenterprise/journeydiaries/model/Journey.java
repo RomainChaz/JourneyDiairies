@@ -9,20 +9,35 @@ import java.util.Calendar;
  */
 
 public class Journey {
+
     private int id;
     private String name;
     private Calendar from;
     private Calendar to;
+    private Double latitude;
+    private Double longitude;
+
     public Journey() {
         name ="";
         from = Calendar.getInstance();
         to = Calendar.getInstance();
     }
-    public Journey(int id, String name, Calendar from, Calendar to) {
+
+    public Journey(Double latitude, Double longitude) {
+        name ="";
+        from = Calendar.getInstance();
+        to = Calendar.getInstance();
+        this.latitude = latitude;
+        this.longitude = longitude;
+    }
+
+    public Journey(int id, String name, Calendar from, Calendar to, Double latitude, Double longitude) {
         this.id = id;
         this.name = name;
         this.from = from;
         this.to = to;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
     public Calendar getFrom() {
         return from;
@@ -47,5 +62,17 @@ public class Journey {
     }
     public void setId(int id) {
         this.id = id;
+    }
+    public Double getLatitude() {
+        return latitude;
+    }
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+    public Double getLongitude() {
+        return longitude;
+    }
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import dodochazoenterprise.journeydiaries.model.Journey;
 
@@ -22,19 +23,19 @@ public class DatabaseImplementor {
 
     Database mydb;
     SQLiteDatabase bdd;
-    String table = "JOURNEY";
-    String id="id", name="name", dateFrom="dateFrom", dateTo="dateTo";
+    Map<DatabaseModel.TablesName, List<String>> tables;
 
     public  DatabaseImplementor(Context context){
         mydb = Database.getInstance(context);
         bdd = mydb.getWritableDatabase();
+        tables = DatabaseModel.getTables();
     }
 
     public List<Journey> getJourneys(){
         Cursor c = null;
         bdd.beginTransaction();
         try{
-        c = bdd.query(table, null, null, null, null, null, null);
+        c = bdd.query(DatabaseModel.TablesName.JOURNEY.toString(), null, null, null, null, null, null);
             bdd.setTransactionSuccessful();
         }catch(Exception e){
             Log.e("BDD", "Impossible de récupérer les journées");
@@ -52,12 +53,13 @@ public class DatabaseImplementor {
         long inserted = 0;
         bdd.beginTransaction();
         try{
+            List<String> columns = tables.get(DatabaseModel.TablesName.JOURNEY);
             //on lui ajoute une valeur associée à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
-            values.put(name, journey.getName());
-            values.put(dateFrom, convertCalendarToString(journey.getFrom()));
-            values.put(dateTo, convertCalendarToString(journey.getTo()));
+            values.put(columns.get(1), journey.getName());
+            values.put(columns.get(2), convertCalendarToString(journey.getFrom()));
+            values.put(columns.get(3), convertCalendarToString(journey.getTo()));
             //on insère l'objet dans la BDD via le ContentValues
-            inserted = bdd.insert(table, null, values);
+            inserted = bdd.insert(DatabaseModel.TablesName.JOURNEY.toString(), null, values);
             bdd.setTransactionSuccessful();
         }catch(Exception e){
             Log.e("BDD", "Impossible d'ajouter");
@@ -74,12 +76,13 @@ public class DatabaseImplementor {
         bdd.beginTransaction();
         int updated=0;
         try{
+            List<String> columns = tables.get(DatabaseModel.TablesName.JOURNEY);
             ContentValues values = new ContentValues();
-            values.put(this.id,journey.getId());
-            values.put(name, journey.getName());
-            values.put(dateFrom, convertCalendarToString(journey.getFrom()));
-            values.put(dateTo, convertCalendarToString(journey.getTo()));
-            updated = bdd.update(table, values, "Id" + " = " + id, null);
+            values.put(columns.get(0),journey.getId());
+            values.put(columns.get(1), journey.getName());
+            values.put(columns.get(2), convertCalendarToString(journey.getFrom()));
+            values.put(columns.get(3), convertCalendarToString(journey.getTo()));
+            updated = bdd.update(DatabaseModel.TablesName.JOURNEY.toString(), values, columns.get(0) + " = " + id, null);
             bdd.setTransactionSuccessful();
         }catch(Exception e){
             Log.e("BDD", "Impossible d'ajouter");
@@ -96,7 +99,8 @@ public class DatabaseImplementor {
         bdd.beginTransaction();
         int deleted=0;
         try{
-            deleted = bdd.delete(table,  "Id" + " = " + id, null);
+            List<String> columns = tables.get(DatabaseModel.TablesName.JOURNEY);
+            deleted = bdd.delete(DatabaseModel.TablesName.JOURNEY.toString(),  columns.get(0) + " = " + id, null);
             bdd.setTransactionSuccessful();
         }catch(Exception e){
             Log.e("BDD", "Impossible d'ajouter");

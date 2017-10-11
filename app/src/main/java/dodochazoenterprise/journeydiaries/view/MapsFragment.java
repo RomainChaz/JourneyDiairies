@@ -74,11 +74,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         if (ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getActivity(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             map.setMyLocationEnabled(true);
             map.setLocationSource(this);
-
-            LatLng sydney = new LatLng(-33.852, 151.211);
-            map.addMarker(new MarkerOptions().position(sydney)
-                    .title("Marker in Sydney"));
-
             map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
 
                 @Override
@@ -97,8 +92,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         positions.add(point);
         map.addMarker(new MarkerOptions().position(point));
 
-        //TODO: Add link between MapsFragment and jvm.JourneyClick() whitout use of xml
-        ((MainActivity) context).showManage(new Journey());
+        ((MainActivity) context).showManage(new Journey(point.latitude, point.longitude));
     }
 
 

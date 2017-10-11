@@ -94,6 +94,8 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
         }
 
         FragmentManager manager = getFragmentManager();
+        //TODO: Error during popUpStackImmediate - Caused by: java.lang.IllegalArgumentException: Binary XML file line #7: Duplicate id 0x7f0c009a, tag null, or parent id 0xffffffff with another fragment for com.google.android.gms.maps.MapFragment
+        // Binary XML file line #7: Binary XML file line #7: Error inflating class fragment
         manager.popBackStackImmediate();
         JourneysFragment fragment = (JourneysFragment) manager.findFragmentById(R.id.fragment_container);
         fragment.update(changed);

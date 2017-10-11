@@ -60,6 +60,22 @@ public class JourneyViewModel extends BaseObservable {
     }
 
     @Bindable
+    public String getLatitude() {
+        String latitude = "";
+        if(journey.getLongitude() != null)
+            latitude =Double.toString(journey.getLatitude());
+        return latitude;
+    }
+
+    @Bindable
+    public String getLongitude() {
+        String longitude = "";
+        if(journey.getLongitude() != null)
+            longitude =Double.toString(journey.getLongitude());
+        return longitude;
+    }
+
+    @Bindable
     public String getFrom() {
         Calendar cal = journey.getFrom();
         SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
