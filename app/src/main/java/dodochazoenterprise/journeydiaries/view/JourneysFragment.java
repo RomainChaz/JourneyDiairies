@@ -36,7 +36,7 @@ public class JourneysFragment extends Fragment {
 
         if (savedInstanceState == null && journeys == null) {
             // Initialization of the list
-            journeys = getJourneys();
+            retrieveJourneys();
 
             this.inflater = inflater;
             this.container = container;
@@ -54,12 +54,16 @@ public class JourneysFragment extends Fragment {
         binding.setJvm(new JourneyViewModel(binding.getRoot().getContext(), null));
     }
 
-    private List<Journey> getJourneys() {
+    public void retrieveJourneys() {
         List<Journey> journeys = new ArrayList<>();
 
         DatabaseImplementor db = new DatabaseImplementor(this.getActivity());
         journeys = db.getJourneys();
 
+        this.journeys =  journeys;
+    }
+
+    public List<Journey> getJourneys() {
         return journeys;
     }
 
@@ -69,7 +73,7 @@ public class JourneysFragment extends Fragment {
 
     public void update(boolean changed) {
         if (changed) {
-            getJourneys();
+            retrieveJourneys();
         }
 
         getFragmentManager().beginTransaction()

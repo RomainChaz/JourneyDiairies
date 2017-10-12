@@ -27,6 +27,7 @@ public class DatabaseModel {
         columns.add("dateTo");
         columns.add("latitude");
         columns.add("longitude");
+        columns.add("note");
 
         tables.put(tableName,columns);
     }

@@ -115,7 +115,7 @@ public class JourneyViewModel extends BaseObservable {
         ((MainActivity) context).showMap();
     }
 
-    public void save(int id, String name, String from, String to) {
+    public void save(int id, String name, String from, String to, String latitude, String longitude) {
         Calendar calBegin = Calendar.getInstance();
         Calendar calEnd = Calendar.getInstance();
         calBegin.setTime(new Date(from));
@@ -127,6 +127,8 @@ public class JourneyViewModel extends BaseObservable {
         this.journey.setName(name);
         this.journey.setFrom(calBegin);
         this.journey.setTo(calEnd);
+        this.journey.setLatitude(Double.parseDouble(latitude));
+        this.journey.setLongitude(Double.parseDouble(longitude));
         String result = "";
         if (state == "Update") {
             this.journey.setId(id);

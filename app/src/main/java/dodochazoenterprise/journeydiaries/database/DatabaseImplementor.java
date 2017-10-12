@@ -88,6 +88,12 @@ public class DatabaseImplementor {
             values.put(columns.get(1), journey.getName());
             values.put(columns.get(2), convertCalendarToString(journey.getFrom()));
             values.put(columns.get(3), convertCalendarToString(journey.getTo()));
+            if(journey.getLatitude() != null){
+                values.put(columns.get(4), journey.getLatitude());
+            }
+            if(journey.getLongitude() != null){
+                values.put(columns.get(5), journey.getLongitude());
+            }
             updated = bdd.update(DatabaseModel.TablesName.JOURNEY.toString(), values, columns.get(0) + " = " + id, null);
             bdd.setTransactionSuccessful();
         }catch(Exception e){
@@ -129,14 +135,16 @@ public class DatabaseImplementor {
         c.moveToFirst();
 
         do {
+            List<String> columns = tables.get(DatabaseModel.TablesName.JOURNEY);
             Journey j = new Journey();
             //on lui affecte toutes les infos grâce aux infos contenues dans le Cursor
-            int col=0;
-            j.setId(c.getInt(col++));
+            j.setId(c.getInt(0));
             j.setName(c.getString(1));
 
             j.setFrom(convertStringToCalendar(c.getString(2)));
             j.setTo(convertStringToCalendar(c.getString(3)));
+            j.setLatitude(c.getDouble(4));
+            j.setLongitude(c.getDouble(5));
 
             journeys.add(j);
         } while (c.moveToNext());

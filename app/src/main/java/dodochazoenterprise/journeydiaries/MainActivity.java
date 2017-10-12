@@ -19,6 +19,8 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
+import java.util.List;
+
 import dodochazoenterprise.journeydiaries.databinding.MainActivityBinding;
 import dodochazoenterprise.journeydiaries.model.Journey;
 import dodochazoenterprise.journeydiaries.view.JourneyManageFragment;
@@ -32,12 +34,13 @@ import dodochazoenterprise.journeydiaries.view.MapsFragment;
 public class MainActivity extends AppCompatActivity implements MapsFragment.LocationInterface {
     private MainActivityBinding binding;
     private MapsFragment mapsFragment;
+    private JourneysFragment journeyFragment;
 
     private LocationListener myLocationListener = new
             LocationListener() {
                 @Override
                 public void onLocationChanged(Location newLocation) {
-                    if(mapsFragment != null && mapsFragment.onLocationChangeListener != null)
+                    if (mapsFragment != null && mapsFragment.onLocationChangeListener != null)
                         mapsFragment.onLocationChangeListener.onLocationChanged(newLocation);
                 }
 
@@ -67,8 +70,8 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
     public void showStartup() {
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
-        JourneysFragment fragment = new JourneysFragment();
-        transaction.replace(R.id.fragment_container, fragment);
+        journeyFragment = new JourneysFragment();
+        transaction.replace(R.id.fragment_container, journeyFragment);
         transaction.commit();
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -102,7 +105,8 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
         FragmentManager manager = getFragmentManager();
         FragmentTransaction transaction = manager.beginTransaction();
         transaction.addToBackStack(null);
-        mapsFragment = new MapsFragment(this);
+        List<Journey> journeys = journeyFragment.getJourneys();
+        mapsFragment = new MapsFragment(this, journeys);
 
         transaction.replace(R.id.fragment_container, mapsFragment);
         transaction.commit();
@@ -121,6 +125,7 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
         int count = getFragmentManager().getBackStackEntryCount();
         if (count == 0) {
             JourneysFragment fragment = (JourneysFragment) manager.findFragmentById(R.id.fragment_container);
+            journeyFragment.retrieveJourneys();
             fragment.update(changed);
 
         }
@@ -151,7 +156,7 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
         super.onBackPressed();
         FragmentManager manager = getFragmentManager();
         Fragment fragment = manager.findFragmentById(R.id.fragment_container);
-        if(fragment instanceof  MapsFragment)
+        if (fragment instanceof MapsFragment)
             mapsFragment = null;
         returnStartup(true);
     }

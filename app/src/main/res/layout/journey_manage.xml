@@ -111,13 +111,14 @@
                 android:id="@+id/latitudeText" />
 
             <EditText
-                android:text="@{jvm.longitude}"
+                android:text="@{jvm.latitude}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ems="10"
-                android:id="@+id/longitude"
+                android:id="@+id/latitude"
                 android:inputType="text"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:enabled="false" />
         </TableRow>
 
         <TableRow
@@ -134,13 +135,14 @@
                 android:gravity="right|center"/>
 
             <EditText
-                android:text="@{jvm.latitude}"
+                android:text="@{jvm.longitude}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:ems="10"
-                android:id="@+id/latitude"
+                android:id="@+id/longitude"
                 android:inputType="text"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:enabled="false" />
         </TableRow>
 
 
@@ -160,7 +162,7 @@
 
             <Button
                 android:text="@{jvm.state}"
-                android:onClick="@{() -> jvm.save(jvm.id, editName.getText().toString(), editFrom.getText().toString(), editTo.getText().toString())}"
+                android:onClick="@{() -> jvm.save(jvm.id, editName.getText().toString(), editFrom.getText().toString(), editTo.getText().toString(), latitude.getText().toString(), longitude.getText().toString())}"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/buttonUpdate"/>

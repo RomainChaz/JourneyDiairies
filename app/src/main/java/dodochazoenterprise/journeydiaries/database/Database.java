@@ -18,7 +18,7 @@ public class Database  extends SQLiteOpenHelper {
     private static final int DATABASE_VERSION = 2;
 
     // Database creation sql statement
-    private static final String DATABASE_CREATE = "create table JOURNEY( id integer primary key ,name text not null, dateFrom date not null, dateTo date not null, latitude double, longitude double);";
+    private static final String DATABASE_CREATE = "create table JOURNEY( id integer primary key ,name text not null, dateFrom date not null, dateTo date not null, latitude double, longitude double, note text);";
 
     private Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);

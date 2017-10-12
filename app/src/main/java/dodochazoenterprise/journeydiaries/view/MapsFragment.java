@@ -1,25 +1,20 @@
 package dodochazoenterprise.journeydiaries.view;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.LocationSource;
 import com.google.android.gms.maps.MapFragment;
@@ -33,10 +28,8 @@ import java.util.List;
 
 import dodochazoenterprise.journeydiaries.MainActivity;
 import dodochazoenterprise.journeydiaries.R;
-import dodochazoenterprise.journeydiaries.databinding.JourneyManageBinding;
 import dodochazoenterprise.journeydiaries.databinding.MapsFragmentBinding;
 import dodochazoenterprise.journeydiaries.model.Journey;
-import dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel;
 
 /**
  * Created by Donatien on 11/10/2017.
@@ -49,20 +42,28 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     private Context context;
     public OnLocationChangedListener onLocationChangeListener;
     //TODO: Use database
-    private List<LatLng> positions;
+    private List<Journey> journeys;
     private MapsFragmentBinding binding;
 
-    public MapsFragment(Context context){
+    public MapsFragment(Context context, List<Journey> journeys) {
         this.context = context;
+        this.journeys = journeys;
+    }
+
+    private void showMarkers() {
+        for (Journey j : journeys){
+            LatLng position = new LatLng(j.getLatitude(), j.getLongitude());
+            map.addMarker(new MarkerOptions().position(position));
+        }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
-        positions = new ArrayList<>();
-    //TODO: When go from map fragment to create journey fragment, error xause by merge layout and attachToParent = false
-        if(binding == null) {
+
+        //TODO: When go from map fragment to create journey fragment, error xause by merge layout and attachToParent = false
+        if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.maps_fragment, container, false);
         }
 
@@ -85,7 +86,20 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
                     addMarker(point);
                 }
             });
+            map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker) {
+                    for(Journey j: journeys){
+                        if(j.getLatitude() == marker.getPosition().latitude && j.getLongitude() == marker.getPosition().longitude){
+                            String tmp = "Marker: " + marker.getPosition();
+                            Toast.makeText(context, tmp, Toast.LENGTH_SHORT).show();
 
+                        }
+                    }
+                    return false;
+                }
+            });
+            showMarkers();
             return;
         }
 
@@ -105,7 +119,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     }
 
     private void addMarker(LatLng point) {
-        positions.add(point);
+
         map.addMarker(new MarkerOptions().position(point));
 
         ((MainActivity) context).showManage(new Journey(point.latitude, point.longitude));
@@ -122,7 +136,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         this.onLocationChangeListener = null;
     }
 
-    public Location getCurrentLocation(){
+    public Location getCurrentLocation() {
         return currentLocation;
     }
 
