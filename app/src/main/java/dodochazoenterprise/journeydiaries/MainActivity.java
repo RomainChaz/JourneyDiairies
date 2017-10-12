@@ -87,20 +87,6 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
         transaction.commit();
     }
 
-    public void returnStartup(boolean changed) {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            locationManager.removeUpdates(myLocationListener);
-        }
-
-        FragmentManager manager = getFragmentManager();
-        //TODO: Error during popUpStackImmediate - Caused by: java.lang.IllegalArgumentException: Binary XML file line #7: Duplicate id 0x7f0c009a, tag null, or parent id 0xffffffff with another fragment for com.google.android.gms.maps.MapFragment
-        // Binary XML file line #7: Binary XML file line #7: Error inflating class fragment
-        manager.popBackStackImmediate();
-        JourneysFragment fragment = (JourneysFragment) manager.findFragmentById(R.id.fragment_container);
-        fragment.update(changed);
-    }
-
     public void showMap() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
@@ -122,6 +108,24 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
         transaction.commit();
     }
 
+    public void returnStartup(boolean changed) {
+        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            locationManager.removeUpdates(myLocationListener);
+        }
+
+        FragmentManager manager = getFragmentManager();
+        //TODO: Error during popUpStackImmediate - Caused by: java.lang.IllegalArgumentException: Binary XML file line #7: Duplicate id 0x7f0c009a, tag null, or parent id 0xffffffff with another fragment for com.google.android.gms.maps.MapFragment
+        // Binary XML file line #7: Binary XML file line #7: Error inflating class fragment
+        manager.popBackStackImmediate();
+        int count = getFragmentManager().getBackStackEntryCount();
+        if (count == 0) {
+            JourneysFragment fragment = (JourneysFragment) manager.findFragmentById(R.id.fragment_container);
+            fragment.update(changed);
+
+        }
+
+    }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull final String[] permissions, @NonNull int[] grantResults) {
@@ -149,6 +153,7 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
         Fragment fragment = manager.findFragmentById(R.id.fragment_container);
         if(fragment instanceof  MapsFragment)
             mapsFragment = null;
+        returnStartup(true);
     }
 
     @Override

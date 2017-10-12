@@ -1,7 +1,9 @@
 package dodochazoenterprise.journeydiaries.view;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
@@ -12,6 +14,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +50,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     public OnLocationChangedListener onLocationChangeListener;
     //TODO: Use database
     private List<LatLng> positions;
+    private MapsFragmentBinding binding;
 
     public MapsFragment(Context context){
         this.context = context;
@@ -57,13 +61,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
         positions = new ArrayList<>();
-        MapsFragmentBinding binding = DataBindingUtil.inflate(inflater, R.layout.maps_fragment, container, false);
+    //TODO: When go from map fragment to create journey fragment, error xause by merge layout and attachToParent = false
+        if(binding == null) {
+            binding = DataBindingUtil.inflate(inflater, R.layout.maps_fragment, container, false);
+        }
 
         MapFragment mapFragment = (MapFragment) getChildFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-
-
 
         return binding.getRoot();
     }
@@ -87,6 +91,18 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
     }
 
+    @Override
+    public void onDestroyView() {
+
+        FragmentManager fm = getFragmentManager();
+
+        Fragment xmlFragment = fm.findFragmentById(R.id.maps_fragment);
+        if (xmlFragment != null) {
+            fm.beginTransaction().remove(xmlFragment).commit();
+        }
+
+        super.onDestroyView();
+    }
 
     private void addMarker(LatLng point) {
         positions.add(point);

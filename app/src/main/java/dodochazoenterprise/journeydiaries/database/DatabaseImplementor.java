@@ -58,6 +58,12 @@ public class DatabaseImplementor {
             values.put(columns.get(1), journey.getName());
             values.put(columns.get(2), convertCalendarToString(journey.getFrom()));
             values.put(columns.get(3), convertCalendarToString(journey.getTo()));
+            if(journey.getLatitude() != null){
+                values.put(columns.get(4), journey.getLatitude());
+            }
+            if(journey.getLongitude() != null){
+                values.put(columns.get(5), journey.getLongitude());
+            }
             //on insère l'objet dans la BDD via le ContentValues
             inserted = bdd.insert(DatabaseModel.TablesName.JOURNEY.toString(), null, values);
             bdd.setTransactionSuccessful();

@@ -8,9 +8,19 @@
             type="dodochazoenterprise.journeydiaries.viewModel.JourneyViewModel"
             />
     </data>
-    <android.support.design.widget.CoordinatorLayout
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/menu">
+
+        <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/journeys_list"
             android:layout_width="match_parent"
@@ -34,11 +44,12 @@
             android:onClick="@{() -> jvm.onMapClick()}"
             android:layout_gravity="top|right"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginLeft="20px"
             android:layout_marginBottom="20px"
             app:layout_anchor="@+id/journeys_list"
-            app:layout_anchorGravity="bottom|left"
-            app:backgroundTint="@android:color/holo_green_dark" />
+            app:backgroundTint="@android:color/holo_green_dark"
+            app:layout_anchorGravity="bottom" />
     </android.support.design.widget.CoordinatorLayout>
+    </LinearLayout>
 </layout>
