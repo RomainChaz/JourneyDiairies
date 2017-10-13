@@ -29,7 +29,7 @@
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/add_journey_button"
-            android:onClick="@{() -> jvm.onJourneyClick()}"
+            android:onClick="@{() -> jvm.onMapClick()}"
             android:layout_gravity="top|left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -38,18 +38,6 @@
             android:src="@android:drawable/ic_menu_add"
             app:layout_anchor="@+id/journeys_list"
             app:layout_anchorGravity="bottom|right" />
-
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/show_map"
-            android:onClick="@{() -> jvm.onMapClick()}"
-            android:layout_gravity="top|right"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="20px"
-            android:layout_marginBottom="20px"
-            app:layout_anchor="@+id/journeys_list"
-            app:backgroundTint="@android:color/holo_green_dark"
-            app:layout_anchorGravity="bottom" />
     </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>
 </layout>

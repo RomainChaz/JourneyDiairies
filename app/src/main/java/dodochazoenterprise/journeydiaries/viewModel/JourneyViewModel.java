@@ -107,6 +107,7 @@ public class JourneyViewModel extends BaseObservable {
 
             Toast toast = Toast.makeText(context, ((MainActivity) context).getResources().getString(R.string.journey_deleted), Toast.LENGTH_SHORT);
             toast.show();
+            ((MainActivity) context).returnStartup(Boolean.TRUE);
         }
         ((MainActivity) context).returnStartup(Boolean.FALSE);
     }

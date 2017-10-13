@@ -8,6 +8,12 @@
             />
     </data>
 
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -18,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center_horizontal">
-
             <TextView
                 android:text="Name :"
                 android:gravity="right|center"
@@ -145,6 +150,43 @@
                 android:enabled="false" />
         </TableRow>
 
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_centerVertical="true"
+                android:id="@+id/noteText"
+                android:text="Note :"
+                android:gravity="center"
+                android:textAlignment="center" />
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
+
+
+
+            <EditText
+                android:text="@{jvm.longitude}"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:ems="10"
+                android:id="@+id/note"
+                android:inputType="text"
+                android:textAlignment="center"
+                android:enabled="false" />
+
+        </TableRow>
+
 
 
         <TableRow
@@ -168,4 +210,6 @@
                 android:id="@+id/buttonUpdate"/>
         </TableRow>
     </TableLayout>
+
+    </ScrollView>
 </layout>

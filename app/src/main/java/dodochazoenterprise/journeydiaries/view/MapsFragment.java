@@ -4,12 +4,17 @@ import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +28,9 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import dodochazoenterprise.journeydiaries.MainActivity;
 import dodochazoenterprise.journeydiaries.R;
@@ -38,10 +44,18 @@ import dodochazoenterprise.journeydiaries.model.Journey;
 public class MapsFragment extends Fragment implements OnMapReadyCallback, LocationSource {
 
     public GoogleMap map;
-    private Location currentLocation;
     private Context context;
     public OnLocationChangedListener onLocationChangeListener;
-    //TODO: Use database
+    Journey target = new Journey();
+
+    public List<Journey> getJourneys() {
+        return journeys;
+    }
+
+    public void setJourneys(List<Journey> journeys) {
+        this.journeys = journeys;
+    }
+
     private List<Journey> journeys;
     private MapsFragmentBinding binding;
 
@@ -51,7 +65,7 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     }
 
     private void showMarkers() {
-        for (Journey j : journeys){
+        for (Journey j : journeys) {
             LatLng position = new LatLng(j.getLatitude(), j.getLongitude());
             map.addMarker(new MarkerOptions().position(position));
         }
@@ -62,7 +76,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
                              Bundle savedInstanceState) {
 
-        //TODO: When go from map fragment to create journey fragment, error xause by merge layout and attachToParent = false
         if (binding == null) {
             binding = DataBindingUtil.inflate(inflater, R.layout.maps_fragment, container, false);
         }
@@ -89,13 +102,34 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
-                    for(Journey j: journeys){
-                        if(j.getLatitude() == marker.getPosition().latitude && j.getLongitude() == marker.getPosition().longitude){
-                            String tmp = "Marker: " + marker.getPosition();
-                            Toast.makeText(context, tmp, Toast.LENGTH_SHORT).show();
-
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    for (Journey j : journeys) {
+                        if (j.getLatitude() == marker.getPosition().latitude && j.getLongitude() == marker.getPosition().longitude) {
+                            target = j;
+                            String address = getAddress(new LatLng(j.getLatitude(), j.getLongitude()));
+                            if (address.equals(" - ")) {
+                                address = j.getName();
+                            } else {
+                                address += "\n" + j.getName();
+                            }
+                            builder.setTitle(address);
                         }
                     }
+
+                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
+
+                            {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    // User clicked OK button
+                                    ((MainActivity) context).showManage(target);
+                                }
+                            }
+                    );
+
+                    // Create the AlertDialog
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+
                     return false;
                 }
             });
@@ -103,6 +137,50 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             return;
         }
 
+    }
+
+    private String getAddress(LatLng latLng) {
+        Geocoder geocoder =
+                new Geocoder(context, Locale.getDefault());
+        // Create a list to contain the result address
+        List<Address> addresses = null;
+        try {
+            /*
+             * Return 1 address.
+             */
+            addresses = geocoder.getFromLocation(latLng.latitude,
+                    latLng.longitude, 1);
+        } catch (IOException e1) {
+            Log.e("LocationSampleActivity",
+                    "IO Exception in getFromLocation()");
+            e1.printStackTrace();
+            return ("IO Exception trying to get address");
+        } catch (IllegalArgumentException e2) {
+            // Error message to post in the log
+            String errorString = "Illegal arguments " +
+                    Double.toString(latLng.latitude) +
+                    " , " +
+                    Double.toString(latLng.longitude) +
+                    " passed to address service";
+            Log.e("LocationSampleActivity", errorString);
+            e2.printStackTrace();
+            return errorString;
+        }
+        // If the reverse geocode returned an address
+        if (addresses != null && addresses.size() > 0) {
+            // Get the first address
+            String resultat = " - ";
+            Address address = addresses.get(0);
+            if (null == address.getCountryName() || null == address.getLocality()) {
+                resultat = " - ";
+            } else {
+                resultat = address.getCountryName() + resultat + address.getLocality();
+            }
+
+            return resultat;
+        } else {
+            return " - ";
+        }
     }
 
     @Override
@@ -125,7 +203,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
         ((MainActivity) context).showManage(new Journey(point.latitude, point.longitude));
     }
 
-
     @Override
     public void activate(OnLocationChangedListener onLocationChangedListener) {
         this.onLocationChangeListener = onLocationChangedListener;
@@ -134,10 +211,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     @Override
     public void deactivate() {
         this.onLocationChangeListener = null;
-    }
-
-    public Location getCurrentLocation() {
-        return currentLocation;
     }
 
     public interface LocationInterface {

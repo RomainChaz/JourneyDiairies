@@ -10,6 +10,7 @@ import android.databinding.DataBindingUtil;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
@@ -18,6 +19,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
+
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.util.List;
 
@@ -59,12 +65,20 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
             };
 
     private static final int MY_LOCATION_REQUEST_CODE = 1;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.main_activity);
         this.showStartup();
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
     public void showStartup() {
@@ -119,15 +133,18 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
         }
 
         FragmentManager manager = getFragmentManager();
-        //TODO: Error during popUpStackImmediate - Caused by: java.lang.IllegalArgumentException: Binary XML file line #7: Duplicate id 0x7f0c009a, tag null, or parent id 0xffffffff with another fragment for com.google.android.gms.maps.MapFragment
-        // Binary XML file line #7: Binary XML file line #7: Error inflating class fragment
         manager.popBackStackImmediate();
         int count = getFragmentManager().getBackStackEntryCount();
         if (count == 0) {
             JourneysFragment fragment = (JourneysFragment) manager.findFragmentById(R.id.fragment_container);
-            journeyFragment.retrieveJourneys();
             fragment.update(changed);
 
+        }
+        if (changed) {
+            journeyFragment.retrieveJourneys();
+            if (mapsFragment != null) {
+                mapsFragment.setJourneys(journeyFragment.getJourneys());
+            }
         }
 
     }
@@ -158,7 +175,7 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
         Fragment fragment = manager.findFragmentById(R.id.fragment_container);
         if (fragment instanceof MapsFragment)
             mapsFragment = null;
-        returnStartup(true);
+        returnStartup(false);
     }
 
     @Override
@@ -169,5 +186,41 @@ public class MainActivity extends AppCompatActivity implements MapsFragment.Loca
     @Override
     public void setLocation(Location location) {
 
+    }
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Main Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
     }
 }
