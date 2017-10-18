@@ -64,6 +64,7 @@ public class DatabaseImplementor {
             if(journey.getLongitude() != null){
                 values.put(columns.get(5), journey.getLongitude());
             }
+            values.put(columns.get(6), journey.getNote());
             //on insère l'objet dans la BDD via le ContentValues
             inserted = bdd.insert(DatabaseModel.TablesName.JOURNEY.toString(), null, values);
             bdd.setTransactionSuccessful();
@@ -94,6 +95,7 @@ public class DatabaseImplementor {
             if(journey.getLongitude() != null){
                 values.put(columns.get(5), journey.getLongitude());
             }
+            values.put(columns.get(6), journey.getNote());
             updated = bdd.update(DatabaseModel.TablesName.JOURNEY.toString(), values, columns.get(0) + " = " + id, null);
             bdd.setTransactionSuccessful();
         }catch(Exception e){
@@ -145,6 +147,7 @@ public class DatabaseImplementor {
             j.setTo(convertStringToCalendar(c.getString(3)));
             j.setLatitude(c.getDouble(4));
             j.setLongitude(c.getDouble(5));
+            j.setNote(c.getString(6));
 
             journeys.add(j);
         } while (c.moveToNext());

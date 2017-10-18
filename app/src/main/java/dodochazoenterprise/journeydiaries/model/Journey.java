@@ -16,6 +16,7 @@ public class Journey {
     private Calendar to;
     private Double latitude;
     private Double longitude;
+    private String note;
 
     public Journey() {
         name ="";
@@ -31,13 +32,14 @@ public class Journey {
         this.longitude = longitude;
     }
 
-    public Journey(int id, String name, Calendar from, Calendar to, Double latitude, Double longitude) {
+    public Journey(int id, String name, Calendar from, Calendar to, Double latitude, Double longitude, String note) {
         this.id = id;
         this.name = name;
         this.from = from;
         this.to = to;
         this.latitude = latitude;
         this.longitude = longitude;
+        this.note = note;
     }
     public Calendar getFrom() {
         return from;
@@ -74,5 +76,11 @@ public class Journey {
     }
     public void setLongitude(Double longitude) {
         this.longitude = longitude;
+    }
+    public String getNote() {
+        return note;
+    }
+    public void setNote(String note) {
+        this.note = note;
     }
 }

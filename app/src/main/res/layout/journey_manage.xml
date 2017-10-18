@@ -14,202 +14,205 @@
         android:layout_height="match_parent">
 
 
-    <TableLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:gravity="center_horizontal">
-
-        <TableRow
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal">
-            <TextView
-                android:text="Name :"
-                android:gravity="right|center"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/textName"/>
-
-            <EditText
-                android:text="@{jvm.name}"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:id="@+id/editName"
-                android:inputType="text"
-                android:textAlignment="center" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal">
+            android:layout_height="wrap_content">
 
             <TextView
-                android:text="Departure date :"
+                android:text="Create new Journey"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/textFrom"
-                android:gravity="right|center" />
-
-            <EditText
-                android:text="@{jvm.from}"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"
-                android:ems="10"
-                android:id="@+id/editFrom"
-                android:gravity="center_vertical|center"
-                android:textAlignment="center" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:id="@+id/textTo"
-                android:text="Return date :"
-                android:gravity="right|center" />
-
-            <EditText
-                android:text="@{jvm.to}"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:id="@+id/editTo"
-                android:inputType="text"
-                android:textAlignment="center" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal"
-            android:layout_margin="10dp">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:id="@+id/coordonnes"
-                android:text="Coordonnées :"
-                android:gravity="center"
-                android:textAlignment="center" />
-        </TableRow>
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:text="Latitude :"
-                android:gravity="right|center"
-                android:id="@+id/latitudeText" />
-
-            <EditText
-                android:text="@{jvm.latitude}"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:id="@+id/latitude"
-                android:inputType="text"
-                android:textAlignment="center"
-                android:enabled="false" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:id="@+id/longitudeText"
-                android:text="Longitude:"
-                android:gravity="right|center"/>
-
-            <EditText
-                android:text="@{jvm.longitude}"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:id="@+id/longitude"
-                android:inputType="text"
-                android:textAlignment="center"
-                android:enabled="false" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal">
-
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_centerVertical="true"
-                android:id="@+id/noteText"
-                android:text="Note :"
-                android:gravity="center"
+                android:layout_height="wrap_content"
+                android:id="@+id/textView"
+                android:gravity="center_vertical|fill_horizontal|center"
+                android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textAlignment="center" />
 
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal">
-
-
-
-            <EditText
-                android:text="@{jvm.longitude}"
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:ems="10"
-                android:id="@+id/note"
-                android:inputType="text"
-                android:textAlignment="center"
-                android:enabled="false" />
+                android:layout_height="wrap_content">
 
-        </TableRow>
+                <TextView
+                    android:text="Name :"
+                    android:gravity="right|center"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textName"/>
 
+                <EditText
+                    android:text="@{jvm.name}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:id="@+id/editName"
+                    android:inputType="text"
+                    android:textAlignment="center" />
 
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center_horizontal">
-
-            <Button
-                android:text="@{jvm.stateReturn}"
-                android:onClick="@{() -> jvm.onDeleteClick()}"
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/buttonCancel"
-                android:elevation="0dp" />
+                android:layout_height="wrap_content">
 
-            <Button
-                android:text="@{jvm.state}"
-                android:onClick="@{() -> jvm.save(jvm.id, editName.getText().toString(), editFrom.getText().toString(), editTo.getText().toString(), latitude.getText().toString(), longitude.getText().toString())}"
+                <TextView
+                    android:text="Departure date :"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/textFrom"
+                    android:gravity="right|center" />
+
+                <EditText
+                    android:text="@{jvm.from}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"
+                    android:ems="10"
+                    android:id="@+id/editFrom"
+                    android:gravity="center_vertical|center"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/buttonUpdate"/>
-        </TableRow>
-    </TableLayout>
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/textTo"
+                    android:text="Return date :"
+                    android:gravity="right|center" />
+
+                <EditText
+                    android:text="@{jvm.to}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:id="@+id/editTo"
+                    android:inputType="text"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/noteText"
+                    android:text="Note :"
+                    android:gravity="center"
+                    android:textAlignment="center" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:text="@{jvm.note}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:id="@+id/note"
+                    android:inputType="text"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/coordonnes"
+                    android:text="Coordonnées :"
+                    android:gravity="center"
+                    android:textAlignment="center" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:text="Latitude :"
+                    android:gravity="right|center"
+                    android:id="@+id/latitudeText" />
+
+                <EditText
+                    android:text="@{jvm.latitude}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:id="@+id/latitude"
+                    android:inputType="text"
+                    android:textAlignment="center"
+                    android:enabled="false" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/longitudeText"
+                    android:text="Longitude:"
+                    android:gravity="right|center"/>
+
+                <EditText
+                    android:text="@{jvm.longitude}"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:ems="10"
+                    android:id="@+id/longitude"
+                    android:inputType="text"
+                    android:textAlignment="center"
+                    android:enabled="false" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:text="@{jvm.stateReturn}"
+                    android:onClick="@{() -> jvm.onDeleteClick()}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/buttonCancel"
+                    android:elevation="0dp" />
+
+                <Button
+                    android:text="@{jvm.state}"
+                    android:onClick="@{() -> jvm.save(jvm.id, editName.getText().toString(), editFrom.getText().toString(), editTo.getText().toString(), latitude.getText().toString(), longitude.getText().toString(), note.getText().toString())}"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:id="@+id/buttonUpdate"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </ScrollView>
 </layout>

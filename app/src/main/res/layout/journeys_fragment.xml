@@ -35,9 +35,10 @@
             android:layout_height="wrap_content"
             android:layout_marginRight="20px"
             android:layout_marginBottom="20px"
-            android:src="@android:drawable/ic_menu_add"
+            android:src="@android:drawable/ic_input_add"
             app:layout_anchor="@+id/journeys_list"
-            app:layout_anchorGravity="bottom|right" />
+            app:layout_anchorGravity="bottom|right"
+            app:elevation="15dp" />
     </android.support.design.widget.CoordinatorLayout>
     </LinearLayout>
 </layout>
