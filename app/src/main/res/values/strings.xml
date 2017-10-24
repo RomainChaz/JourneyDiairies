@@ -5,6 +5,7 @@
     <string name="journey_created">Journy successfully created</string>
     <string name="journey_updated">Journy successfully updated</string>
     <string name="googleKey">AIzaSyAVBVxhYkWNz2BgwE_ycD8B0uEGOzQKaRY</string>
-    <string name="ok">Editer</string>
-    <string name="cancel">Masquer</string>
+    <string name="create">Create</string>
+    <string name="edit">Editer</string>
+    <string name="cancel">Annuler</string>
 </resources>

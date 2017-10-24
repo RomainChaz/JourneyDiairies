@@ -46,29 +46,14 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     public GoogleMap map;
     private Context context;
     public OnLocationChangedListener onLocationChangeListener;
-    Journey target = new Journey();
-
-    public List<Journey> getJourneys() {
-        return journeys;
-    }
-
-    public void setJourneys(List<Journey> journeys) {
-        this.journeys = journeys;
-    }
-
+    private Journey target = new Journey();
+    private LatLng tmpLocation;
     private List<Journey> journeys;
     private MapsFragmentBinding binding;
 
     public MapsFragment(Context context, List<Journey> journeys) {
         this.context = context;
         this.journeys = journeys;
-    }
-
-    private void showMarkers() {
-        for (Journey j : journeys) {
-            LatLng position = new LatLng(j.getLatitude(), j.getLongitude());
-            map.addMarker(new MarkerOptions().position(position));
-        }
     }
 
     @Nullable
@@ -96,17 +81,47 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
                 @Override
                 public void onMapClick(LatLng point) {
-                    addMarker(point);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    String address = getAddress(new LatLng(point.latitude, point.longitude));
+                    if (address.equals(" - ")) {
+                        address = "Unknown destination";
+                    }
+                    tmpLocation = point;
+                    builder.setTitle(address);
+
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+
+                            {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    dialog.cancel();
+                                }
+                            }
+                    );
+
+                    builder.setPositiveButton(R.string.create, new DialogInterface.OnClickListener()
+
+                            {
+                                public void onClick(DialogInterface dialog, int id) {
+                                    addMarker(tmpLocation);
+                                }
+                            }
+                    );
+
+                    // Create the AlertDialog
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
                 }
             });
             map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker) {
+
                     AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    String address = "";
                     for (Journey j : journeys) {
                         if (j.getLatitude() == marker.getPosition().latitude && j.getLongitude() == marker.getPosition().longitude) {
                             target = j;
-                            String address = getAddress(new LatLng(j.getLatitude(), j.getLongitude()));
+                            address = getAddress(new LatLng(j.getLatitude(), j.getLongitude()));
                             if (address.equals(" - ")) {
                                 address = j.getName();
                             } else {
@@ -115,20 +130,9 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
                             builder.setTitle(address);
                         }
                     }
-
-                    builder.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener()
-
-                            {
-                                public void onClick(DialogInterface dialog, int id) {
-                                    // User clicked OK button
-                                    ((MainActivity) context).showManage(target);
-                                }
-                            }
-                    );
-
-                    // Create the AlertDialog
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
+                    FragmentManager fm = getFragmentManager();
+                    ShowJourneyDialog dialogFragment = new ShowJourneyDialog (address, target.getNote());
+                    dialogFragment.show(fm, "Manage journey");
 
                     return false;
                 }
@@ -137,6 +141,15 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
             return;
         }
 
+    }
+
+
+
+    private void showMarkers() {
+        for (Journey j : journeys) {
+            LatLng position = new LatLng(j.getLatitude(), j.getLongitude());
+            map.addMarker(new MarkerOptions().position(position));
+        }
     }
 
     private String getAddress(LatLng latLng) {
@@ -197,9 +210,6 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
     }
 
     private void addMarker(LatLng point) {
-
-        map.addMarker(new MarkerOptions().position(point));
-
         ((MainActivity) context).showManage(new Journey(point.latitude, point.longitude));
     }
 
@@ -215,5 +225,13 @@ public class MapsFragment extends Fragment implements OnMapReadyCallback, Locati
 
     public interface LocationInterface {
         public void setLocation(Location location);
+    }
+
+    public List<Journey> getJourneys() {
+        return journeys;
+    }
+
+    public void setJourneys(List<Journey> journeys) {
+        this.journeys = journeys;
     }
 }
